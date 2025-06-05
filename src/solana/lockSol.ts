@@ -88,21 +88,57 @@ function parseAnchorError(error: any): string {
 
 export async function lockSol(
   wallet: WalletContextState,
-  amountLamports: number
+  amountLamports: number,
+  ethAddress: string 
 ): Promise<string> {
-  // Validate inputs
+  // checking if the wallet is connected 
   if (!wallet.connected || !wallet.publicKey) {
     throw new Error("Wallet not connected");
   }
+
+  //making sure the amount can make the transactions 
   if (amountLamports <= 0) {
     throw new Error("Amount must be positive");
   }
   if (amountLamports < 1000) {
     throw new Error("Amount too small (minimum 1000 lamports)");
   }
-
-  const userPublicKey = wallet.publicKey;
   
+
+   // ADD ETH ADDRESS VALIDATION
+  if (!ethAddress || ethAddress.trim() === "") {
+    throw new Error("Ethereum address is required");
+  }
+
+  // Basic ETH address format validation (starts with 0x, 42 chars total)
+  if (!/^0x[a-fA-F0-9]{40}$/.test(ethAddress)) {
+    throw new Error("Invalid Ethereum address format");
+  }
+  
+  const userPublicKey = wallet.publicKey;
+  //1.logging the data to make sure they are there .
+  //2.validating the program id.
+  //3. getting a pda .
+  //4. making sure the pda is off the curve so it can be used .
+  //5.check the network connectivity
+  //6.check if bridgeAccount exist and has been initiated.
+  //7. if it exist we now log it out .
+  //8. verify who owns the bridge account
+  //9. verify bridge account have the right amount of data .
+  //10. check user balance
+  //11. logging out the amount needed if the balance is not enough
+  //12. getting the descriminatorInstructionData which is a buffer.
+  //13. transaction instruction for the program
+  //14. getting the lastblock hash and hieght
+  //15. prepare the transaction
+  //16. check the transaction size .
+  //17. semulate the transaction.
+  //18. handle the simulation error.
+  //19. verify simulation logs
+  //20. send transaction with enhanced error handling .
+  //21.  checking if the transaction error is empty.
+  //22. confirm that is traction went through.
+  //23. final verification.
   try {
     console.log("🚀 Starting lockSol transaction...");
     console.log("👤 User:", userPublicKey.toBase58());
@@ -147,14 +183,16 @@ export async function lockSol(
       console.error("Failed to fetch bridge account info:", err);
       throw new Error("Failed to fetch bridge account information");
     }
-
+    
+    //logging out the bridgeAccount information since it exist
     console.log("🏦 Bridge account info:", {
       exists: !!bridgeAccountInfo,
       owner: bridgeAccountInfo?.owner.toBase58(),
       lamports: bridgeAccountInfo?.lamports,
       dataLength: bridgeAccountInfo?.data.length
     });
-
+    
+    //if not initiated the error helps us know .
     if (!bridgeAccountInfo) {
       throw new Error("Bridge account not initialized. You need to call initialize() first.");
     }
@@ -187,7 +225,8 @@ export async function lockSol(
         `Need: ${(totalNeeded/1e9).toFixed(6)} SOL (including ~${(feeBuffer/1e9).toFixed(6)} SOL for fees)`
       );
     }
-
+   
+    //logging out the balance needed.
     console.log("💳 Balance check:", {
       currentBalance: balance,
       balanceSOL: (balance / 1e9).toFixed(6),
@@ -208,40 +247,74 @@ export async function lockSol(
     }
 
     const amountBytes = new BN(amountLamports).toArrayLike(Buffer, 'le', 8);
-    const data = Buffer.concat([discriminator, amountBytes]);
-    
+    //const data = Buffer.concat([discriminator, amountBytes]);
+
+    //serialize the ethereum address
+    const ethAddressBytes = Buffer.from(ethAddress,'utf8');
+    const ethAddressLength = Buffer.allocUnsafe(4);
+    ethAddressLength.writeUInt32LE(ethAddressBytes.length, 0);
+     
+    const data = Buffer.concat([
+      discriminator,
+      amountBytes,
+      ethAddressLength,
+      ethAddressBytes
+    ]);
+
+
+    //logging out the buffered data from the descriminator
+    //descriminator is what helps the solanaprogram choose a 
+    // function to execute from the first 8 byte
     console.log("📦 Instruction data:", {
       discriminator: Array.from(discriminator),
       discriminatorHex: discriminator.toString('hex'),
       amountBytes: Array.from(amountBytes),
       amountHex: amountBytes.toString('hex'),
+      //ethe data
+      ethAddressLength: ethAddressLength.readUInt32LE(0),
+      ethAddressBytes: Array.from(ethAddressBytes),
+      ethAddress: ethAddress,
+      //general data
       totalData: Array.from(data),
-      totalDataHex: data.toString('hex')
+      totalDataHex: data.toString('hex'),
+      totalLength: data.length
     });
 
-    // 7. Create instruction with proper account ordering
+   
+    //  for the  user_balance account  in my solana program!
+    const [userBalancePda] = PublicKey.findProgramAddressSync(
+      [Buffer.from("user_balance"), userPublicKey.toBuffer()],
+      PROGRAM_ID
+    );
+
+     // 7. Create instruction with proper account ordering
     const ix = new TransactionInstruction({
       programId: PROGRAM_ID,
       keys: [
         { pubkey: bridgePda, isSigner: false, isWritable: true },        // bridge_account
+        { pubkey: userBalancePda, isSigner:false, isWritable: true}, //for the user_balance
         { pubkey: userPublicKey, isSigner: true, isWritable: true },     // user (signer)
         { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // system_program
       ],
       data,
     });
-
+    
+    //log the transaction instructions .
     console.log("📋 Instruction accounts:", ix.keys.map((key, index) => ({
       index,
       pubkey: key.pubkey.toBase58(),
       isSigner: key.isSigner,
       isWritable: key.isWritable,
-      name: index === 0 ? 'bridge_account' : index === 1 ? 'user' : 'system_program'
+      name: index === 0 ? 'bridge_account' : 
+            index === 1 ? 'user' : 
+            index === 2 ? 'user_balance':
+            'system_program'
     })));
 
-    // 8. Get fresh blockhash with retry logic
+    
     let blockhash: string;
     let lastValidBlockHeight: number;
-    
+    //getting the lastblcok, validblock, Height 
     try {
       const blockhashResponse = await connection.getLatestBlockhash('confirmed');
       blockhash = blockhashResponse.blockhash;
@@ -250,7 +323,8 @@ export async function lockSol(
       console.error("Blockhash error:", err);
       throw new Error("Network error: Failed to get blockhash. Please check your connection.");
     }
-
+    
+    //logging the lastblock hash and last validblock height.
     console.log("🔗 Blockhash info:", {
       blockhash,
       lastValidBlockHeight,
@@ -299,7 +373,9 @@ export async function lockSol(
       unitsConsumed: simulation.value.unitsConsumed,
       returnData: simulation.value.returnData
     });
+    
 
+    //handle simulation error
     if (simulation.value.err) {
       console.error("❌ Simulation failed:", simulation.value.err);
       console.error("📝 Simulation logs:", simulation.value.logs);
@@ -347,8 +423,9 @@ export async function lockSol(
       }
     }
 
-    // 13. Send transaction with enhanced error handling
+    
     console.log("📤 Sending transaction...");
+    //more parameter to help in error handling
     const options: SendOptions = {
       skipPreflight: false, // Double-check even though we simulated
       preflightCommitment: "confirmed",
@@ -356,6 +433,7 @@ export async function lockSol(
     };
 
     let signature: string;
+    //sending transaction with a advance errorhandling
     try {
       signature = await wallet.sendTransaction(tx, connection, options);
     } catch (error: any) {
@@ -404,7 +482,8 @@ export async function lockSol(
 
       throw new Error(`Transaction send failed: ${error.message}`);
     }
-
+    
+    //checking if the transaction signature returned .
     if (!signature) {
       throw new Error("Transaction send returned empty signature");
     }
@@ -414,7 +493,7 @@ export async function lockSol(
     // 14. Confirm transaction with timeout and retry
     console.log("⏳ Confirming transaction...");
     let confirmation;
-    
+    //cheking if the transaction went through
     try {
       confirmation = await connection.confirmTransaction(
         {
@@ -512,6 +591,10 @@ export async function lockSol(
     
     if (errorMessage.includes('insufficient funds')) {
       helpfulError += "\n\n💡 Solution: Add more SOL to your wallet or reduce the lock amount.";
+    }
+
+     if (errorMessage.includes('Invalid Ethereum address')) {
+      helpfulError += "\n\n💡 Solution: Provide a valid Ethereum address (e.g., 0x742d35Cc6634C0532925a3b8D5c8e6c0FD2e8D8E).";
     }
     
     throw new Error(helpfulError);
