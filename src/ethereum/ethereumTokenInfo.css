@@ -1,0 +1,244 @@
+/* EthereumTokenInfo.css */
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.ethereum-token-container {
+  max-width: 28rem;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+/* Network Info */
+.network-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.network-indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #3b82f6;
+  border-radius: 50%;
+}
+
+.network-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Token Info Section */
+.token-info-section {
+  margin-bottom: 1.5rem;
+}
+
+.token-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.contract-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.contract-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.contract-address {
+  font-size: 0.75rem;
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.copy-button:hover {
+  color: #6b7280;
+}
+
+/* Conversion Details */
+.conversion-details {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.conversion-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.conversion-row:last-child {
+  margin-bottom: 0;
+}
+
+.conversion-label {
+  color: #6b7280;
+}
+
+.conversion-value {
+  font-weight: 500;
+  color: #111827;
+}
+
+.conversion-fee {
+  color: #dc2626;
+}
+
+.conversion-rate {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Amount Display */
+.amount-display {
+  background-color: #eff6ff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.amount-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.amount-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 0.25rem;
+}
+
+.usd-value {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Recipient Section */
+.recipient-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+}
+
+.recipient-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.recipient-address-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.recipient-address {
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+  flex: 1;
+  word-break: break-all;
+  color: #111827;
+}
+
+.wallet-note {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.confirm-button {
+  flex: 1;
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-button:hover {
+  background-color: #1d4ed8;
+}
+
+.etherscan-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.etherscan-button:hover {
+  background-color: #f9fafb;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .ethereum-token-container {
+    margin: 0 1rem;
+    padding: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .etherscan-button {
+    justify-content: center;
+  }
+}

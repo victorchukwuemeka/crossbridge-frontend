@@ -1,54 +1,62 @@
-import { useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { lockSol, initializeBridge } from "./solana/lockSol";
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+/*import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+import { BridgeForm } from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
 
 export default function App() {
-  const wallet = useWallet();
-  const [amount, setAmount] = useState(""); // amount in SOL
-  const [ethAddress, setEthAddress] = useState(""); // ETH address for bridge
-  const [loading, setLoading] = useState(false);
-
-  const handleLockSol = async () => {
-    if (!wallet.connected || !wallet.publicKey) {
-      alert("Connect wallet first");
-      return;
-    }
-
-    const solAmount = parseFloat(amount);
-    if (isNaN(solAmount) || solAmount <= 0) {
-      alert("Enter a valid amount of SOL");
-      return;
-    }
-
-    if (!ethAddress.trim()) {
-      alert("Please enter an Ethereum address");
-      return;
-    }
-
-    const lamports = solAmount * 1_000_000_000;
-
-    try {
-      setLoading(true);
+  return (
+    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
+      <h1>Connect your Solana Wallet</h1>
+      <WalletMultiButton />
       
-      // Initialize the bridge account first
-      await initializeBridge(wallet);
-      console.log('✅ Bridge account initialized successfully');
-      
-      // Call lockSol with the ETH address
-      const sig = await lockSol(wallet, lamports, ethAddress);
-      
-      alert("Locked " + amount + " SOL for ETH address: " + ethAddress + "\nTx: " + sig);
-      
-      setAmount("");
-      setEthAddress("");
-      
-    } catch (err) {
-      console.error(err);
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      alert("Error locking SOL: " + errorMessage);
-    } finally {
-      setLoading(false);
+      <WalletBalance />
+      <BridgeForm 
+        onTransactionComplete={() => {
+          // Refresh balance after 2 seconds
+          setTimeout(() => window.location.reload(), 2000);
+        } } balance={null}      />
+
+     
+    </div>
+  );
+}*/
+
+
+
+/*import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+import { BridgeForm } from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
+
+export default function App() {
+  const mockTransactionInfo = {
+    network: {
+      network: 'Solana to Ethereum',
+      testnet: 'Mainnet'
+    },
+    transaction: {
+      inputAmount: 1.5,
+      outputAmount: 1.497,
+    },
+    token: {
+      symbol: 'wSOL'
+    },
+    fees: {
+      bridgeFee: 0.0015,
+      gasFee: 0.0015,
+      totalFees: 0.003
+    },
+    addresses: {
+      recipientAddress: '0x742d35Cc6634C0532925a3b8D4341EaE7C5B4D8D'
+    },
+    metadata: {
+      transactionHash: '5j7x8k9m2n3p4q5r6s7t8u9v1w2x3y4z5a6b7c8d9e1f2g3h4i5j6k7l8m9n1p2q3r4s5t',
+      blockExplorerLink: 'https://solscan.io/tx/5j7x8k9m2n3p4q5r6s7t8u9v1w2x3y4z5a6b7c8d9e1f2g3h4i5j6k7l8m9n1p2q3r4s5t'
+    },
+    ui: {
+      statusIndicator: 'completed' as const,
+      showConfirmButton: false,
+      canCopy: true
     }
   };
 
@@ -56,53 +64,121 @@ export default function App() {
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
       <h1>Connect your Solana Wallet</h1>
       <WalletMultiButton />
-      
-      <h1 style={{ marginBottom: "1rem" }}>Lock SOL</h1>
-      
-      <input
-        id="solAmount"
-        type="number"
-        step="0.001"
-        placeholder="Amount in SOL"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        style={{
-          padding: "0.5rem",
-          width: "100%",
-          marginBottom: "1rem",
-          fontSize: "1rem",
-        }}
+      <WalletBalance />
+      <BridgeForm
+        onTransactionComplete={() => {
+          // Refresh balance after 2 seconds
+          setTimeout(() => window.location.reload(), 2000);
+        }} 
+        balance={null} 
       />
+      <TransactionInfoCard info={mockTransactionInfo} />
+    </div>
+  );
+}*/
 
-      <input
-        id="ethAddress"
-        type="text"
-        placeholder="Ethereum Address (0x...)"
-        value={ethAddress}
-        onChange={(e) => setEthAddress(e.target.value)}
-        style={{
-          padding: "0.5rem",
-          width: "100%",
-          marginBottom: "1rem",
-          fontSize: "1rem",
-        }}
+
+/*import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+import { BridgeForm } from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
+import type { CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
+
+export default function App() {
+  const mockTransactionInfo: CompleteTransactionInfo = {
+    network: {
+      network: 'Solana to Ethereum',
+      testnet: 'Mainnet',
+      chainId: 1,
+      rpcUrl: 'https://mainnet.infura.io/v3/your-key',
+      explorerUrl: 'https://etherscan.io',
+      nativeCurrency: {
+
+      }'ETH'
+    },
+    transaction: {
+      inputAmount: 1.5,
+      outputAmount: 1.497,
+    },
+    token: {
+      symbol: 'wSOL'
+    },
+    fees: {
+      bridgeFee: 0.0015,
+      gasFee: 0.0015,
+      totalFees: 0.003
+    },
+    addresses: {
+      recipientAddress: '0x742d35Cc6634C0532925a3b8D4341EaE7C5B4D8D'
+    },
+    metadata: {
+      transactionHash: '5j7x8k9m2n3p4q5r6s7t8u9v1w2x3y4z5a6b7c8d9e1f2g3h4i5j6k7l8m9n1p2q3r4s5t',
+      blockExplorerLink: 'https://solscan.io/tx/5j7x8k9m2n3p4q5r6s7t8u9v1w2x3y4z5a6b7c8d9e1f2g3h4i5j6k7l8m9n1p2q3r4s5t'
+    },
+    ui: {
+      statusIndicator: 'completed' as const,
+      showConfirmButton: false,
+      canCopy: true
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
+      <h1>Connect your Solana Wallet</h1>
+      <WalletMultiButton />
+      <WalletBalance />
+      <BridgeForm
+        onTransactionComplete={() => {
+          // Refresh balance after 2 seconds
+          setTimeout(() => window.location.reload(), 2000);
+        }} 
+        balance={null} 
       />
+      <TransactionInfoCard info={mockTransactionInfo} />
+    </div>
+  );
+}*/
 
-      <button
-        onClick={handleLockSol}
-        disabled={loading}
-        style={{
-          width: "100%",
-          padding: "0.75rem",
-          fontSize: "1rem",
-          background: "#111",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        {loading ? "Locking..." : "Lock SOL"}
-      </button>
+
+import { useState, useEffect } from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+import { BridgeForm } from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
+import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
+
+export default function App() {
+  const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
+
+  useEffect(() => {
+    // Create sample transaction info when component mounts
+    const loadTransactionInfo = async () => {
+      const info = await getCompleteTransactionInfo(
+        1.5, // solInput
+        '0x742d35Cc6634C0532925a3b8D4341EaE7C5B4D8D', // recipientAddress
+        'So11111111111111111111111111111111111111112', // sourceAddress (example SOL address)
+        'completed', // transactionStatus
+        '5j7x8k9m2n3p4q5r6s7t8u9v1w2x3y4z5a6b7c8d9e1f2g3h4i5j6k7l8m9n1p2q3r4s5t' // txHash
+      );
+      setTransactionInfo(info);
+    };
+
+    loadTransactionInfo();
+  }, []);
+
+  return (
+    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
+      <h1>Connect your Solana Wallet</h1>
+      <WalletMultiButton />
+      <WalletBalance />
+      <BridgeForm
+        onTransactionComplete={() => {
+          // Refresh balance after 2 seconds
+          setTimeout(() => window.location.reload(), 2000);
+        }} 
+        balance={null} 
+      />
+      {transactionInfo && <TransactionInfoCard info={transactionInfo} />}
     </div>
   );
 }
