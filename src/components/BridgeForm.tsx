@@ -57,22 +57,31 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
       setLoading(false);
     }
   };
-
-  return (
-    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
-      <h1 style={{ marginBottom: "1rem" }}>Lock SOL</h1>
+  return (    <div className="bridge-form">
+      <h2 className="text-gradient">Bridge Your Assets</h2>
       
-      <div style={{ position: "relative" }}>
+      <div className="balance-display glass-card">
+        <div>
+          <span className="label">Available Balance</span>
+          <div className="balance-amount">{balance ? `${parseFloat(balance).toFixed(4)} SOL` : '0.0000 SOL'}</div>
+        </div>
+        <div className="network-badge">
+          <span className="status-dot"></span>
+          Solana Network
+        </div>
+      </div>
+
+      <div className="input-container">
         <input
           type="number"
           step="0.001"
-          placeholder="Amount in SOL"
+          placeholder="Enter amount to bridge"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           style={{
-            padding: "0.5rem",
+            padding: "1rem",
             width: "100%",
-            marginBottom: "0.5rem",
+            marginBottom: "0.2rem",
             fontSize: "1rem",
             paddingRight: "60px"
           }}
@@ -111,27 +120,38 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
         value={ethAddress}
         onChange={(e) => setEthAddress(e.target.value)}
         style={{
-          padding: "0.5rem",
+          padding: "1rem",
           width: "100%",
           marginBottom: "1rem",
           fontSize: "1rem",
         }}
-      />
+      />      <div className="transaction-details">
+        <div className="detail-row">
+          <span>Bridge Fee</span>
+          <span>0.001 SOL</span>
+        </div>
+        <div className="detail-row">
+          <span>Network Fee</span>
+          <span>~0.0005 SOL</span>
+        </div>
+        <div className="detail-row total">
+          <span>You will receive</span>
+          <span>{amount ? `${(parseFloat(amount) - 0.0015).toFixed(4)} wSOL` : '0.0000 wSOL'}</span>
+        </div>
+      </div>
 
       <button
+        className="action-button"
         onClick={handleLockSol}
         disabled={loading || !wallet.connected}
-        style={{
-          width: "100%",
-          padding: "0.75rem",
-          fontSize: "1rem",
-          background: loading || !wallet.connected ? "#ccc" : "#111",
-          color: "#fff",
-          border: "none",
-          cursor: loading || !wallet.connected ? "not-allowed" : "pointer",
-        }}
       >
-        {loading ? "Locking..." : "Lock SOL"}
+        {loading ? (
+          <span className="loading">Processing...</span>
+        ) : !wallet.connected ? (
+          'Connect Wallet to Bridge'
+        ) : (
+          'Bridge SOL → wSOL'
+        )}
       </button>
     </div>
   );
