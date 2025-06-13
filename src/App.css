@@ -858,3 +858,61 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 1;
   animation: pulse 2s infinite;
 }
+
+.text-gradient {
+  color: #9945FF;
+  /* Fallback color */
+}
+
+/* Only apply gradient if browser supports it */
+@supports (-webkit-background-clip: text) {
+  .text-gradient {
+    background: linear-gradient(45deg, #9945FF, #14F195);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Wallet Adapter Modal Overrides */
+.wallet-adapter-modal {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.wallet-adapter-modal-container {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.wallet-adapter-modal-title {
+  color: #333 !important;
+  font-weight: 600 !important;
+}
+
+.wallet-adapter-modal-list {
+  padding: 0 !important;
+}
+
+.wallet-adapter-modal-list-item {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 12px !important;
+  margin-bottom: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+.wallet-adapter-modal-list-item:hover {
+  background: rgba(153, 69, 255, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
