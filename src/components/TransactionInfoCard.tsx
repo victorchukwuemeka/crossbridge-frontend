@@ -10,6 +10,8 @@ interface TransactionInfoCardProps {
 export function TransactionInfoCard({ info, onConfirm }: TransactionInfoCardProps) {
   const [copied, setCopied] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  
+  const formatAmount = (amount: number) => amount.toFixed(6);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -29,40 +31,51 @@ export function TransactionInfoCard({ info, onConfirm }: TransactionInfoCardProp
         return null;
     }
   };
-
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-medium text-lg flex items-center gap-2">
-          <StatusIcon />
+    <div className="bridge-details">
+      <div className="bridge-header">
+        <div className="bridge-title">
+          <span className="icon">🌉</span>
           {info.network.network} Bridge
-        </h3>
+          <StatusIcon />
+        </div>
         <button 
+          className="details-toggle"
           onClick={() => setShowDetails(!showDetails)}
-          className="text-sm text-blue-600 hover:underline"
         >
-          {showDetails ? 'Hide Details' : 'Show Details'}
+          {showDetails ? '− Hide Details' : '+ Show Details'}
         </button>
       </div>
 
-      {/* Basic Info */}
-      <div className="space-y-3">
-        <div className="flex justify-between">
-          <span className="text-gray-500">You send</span>
-          <span className="font-medium">
-            {info.transaction.inputAmount.toFixed(6)} SOL
-          </span>
+      <div className="transaction-amounts">
+        <div className="amount-box">
+          <div className="amount-label">
+            <span>📤 You Send</span>
+          </div>
+          <div className="amount-value">
+            {formatAmount(info.transaction.inputAmount)} SOL
+          </div>
         </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">You receive</span>
-          <span className="font-medium">
-            {info.transaction.outputAmount.toFixed(6)} {info.token.symbol}
-          </span>
+
+        <div className="bridge-arrow">
+          <div className="arrow-icon">⭣</div>
         </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Network</span>
-          <span>{info.network.testnet}</span>
+
+        <div className="amount-box">
+          <div className="amount-label">
+            <span>📥 You Receive</span>
+          </div>
+          <div className="amount-value receive">
+            {formatAmount(info.transaction.outputAmount)} {info.token.symbol}
+          </div>
+        </div>
+      </div>
+
+      {/* Basic Info */}      <div className="network-info">
+        <div className="network-icon">Ξ</div>
+        <div className="network-details">
+          <div className="network-name">Ethereum Network</div>
+          <div className="network-type">{info.network.testnet}</div>
         </div>
       </div>
 
