@@ -649,6 +649,8 @@ export async function initializeBridge(
       userBalance: balance
     });
 
+
+    
     const discriminator = getInstructionDiscriminator('initialize');
     
     const ix = new TransactionInstruction({

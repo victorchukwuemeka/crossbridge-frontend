@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import { PublicKey } from "@solana/web3.js";
 import { PROGRAM_ID, BRIDGE_SEED } from "./constants";
 

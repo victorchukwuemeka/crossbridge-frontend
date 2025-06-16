@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { walletSolBalance } from '../solana/walletSolBalance';
 
+
 export function WalletBalance() {
   const wallet = useWallet();
   const [balance, setBalance] = useState<string | null>(null);
