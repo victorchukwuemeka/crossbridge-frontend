@@ -21,11 +21,15 @@
     "@solana/wallet-adapter-torus": "^0.11.32",
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.2",
+    "@tanstack/react-query": "^5.80.7",
+    "@wagmi/core": "^2.17.3",
     "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "lucide-react": "^0.513.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "viem": "^2.31.3",
+    "wagmi": "^2.15.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

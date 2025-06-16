@@ -6,37 +6,36 @@ import { BridgeForm } from './components/BridgeForm';
 import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
 //import './App.css';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+//import { useWallet } from '@solana/wallet-adapter-react';
 
 
 
 export default function App() {
   const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
   const [walletError, setWalletError] = useState<string>('');
-  //const { wallet, connected, connecting } = useWallet();
+  
 
-  // Console logs to see what's happening
-  //console.log('App render - Wallet:', wallet?.adapter.name, 'Connected:', connected, 'Connecting:', connecting);
+  // Ethereum wallet hooks
+  //const { address: ethAddress, isConnected: ethConnected } = useAccount();
+  const { connect: connectEvm, connectors } = useConnect();
+  const { disconnect: disconnectEvm } = useDisconnect();
 
-  // Listen for wallet errors
-  /* useEffect(() => {
-    if (!wallet) {
-      console.log('No wallet found');
-      return;
+  // Get MetaMask connector
+  const metaMaskConnector = connectors.find(
+    (connector) => connector.name === 'MetaMask'
+  );
+
+  const handleEthConnect = () => {
+    if (metaMaskConnector) {
+      connectEvm({ connector: metaMaskConnector });
     }
-    
-    console.log('Adding error listener to wallet:', wallet.adapter.name);
-    
-    const handleError = (error: any) => {
-      console.error('Wallet error caught:', error);
-      setWalletError(error.message || 'Unknown error');
-    };
+  };
 
-    wallet.adapter.on('error', handleError);
-    
-    return () => {
-      wallet.adapter.off('error', handleError);
-    };
-  }, [wallet]);*/
+  const handleEthDisconnect = () => {
+    disconnectEvm();
+  };
+  
 
   useEffect(() => {
     const loadTransactionInfo = async () => {
@@ -57,6 +56,7 @@ export default function App() {
       <div className="main-content">
         <header className="header">
           <div className="logo">CROSSBRIDGE</div>
+          {/**wallet section */}
           <WalletMultiButton className="wallet-button" />
         </header>
 
