@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETH ↔ SOL Token Bridge</title>
+    <title>SOL ↔ wSOL Token Bridge</title>
     <style>
         * {
             margin: 0;
@@ -329,17 +329,17 @@
 <body>
     <div class="bridge-container">
         <div class="bridge-header">
-            <h1 class="bridge-title">🌉 Token Bridge</h1>
-            <p class="bridge-subtitle">Bridge tokens between Ethereum and Solana</p>
+            <h1 class="bridge-title">🌉 SOL Bridge</h1>
+            <p class="bridge-subtitle">Bridge SOL between Solana and Ethereum</p>
         </div>
 
         <!-- From Chain -->
         <div class="chain-section from" id="from-section">
             <div class="chain-header">
                 <div class="chain-info">
-                    <div class="chain-icon ethereum" id="from-icon">ETH</div>
+                    <div class="chain-icon solana" id="from-icon">SOL</div>
                     <div>
-                        <div class="chain-name" id="from-name">Ethereum</div>
+                        <div class="chain-name" id="from-name">Solana</div>
                         <div class="balance-info" id="from-balance">Balance: --</div>
                     </div>
                 </div>
@@ -356,7 +356,7 @@
 
             <div class="amount-input-group">
                 <input type="number" class="amount-input" id="bridge-amount" placeholder="0.0" step="any" oninput="updateReceiveAmount()">
-                <div class="token-symbol" id="from-token">WETH</div>
+                <div class="token-symbol" id="from-token">SOL</div>
                 <button class="max-btn" onclick="setMaxAmount()">MAX</button>
             </div>
         </div>
@@ -370,9 +370,9 @@
         <div class="chain-section to" id="to-section">
             <div class="chain-header">
                 <div class="chain-info">
-                    <div class="chain-icon solana" id="to-icon">SOL</div>
+                    <div class="chain-icon ethereum" id="to-icon">ETH</div>
                     <div>
-                        <div class="chain-name" id="to-name">Solana</div>
+                        <div class="chain-name" id="to-name">Ethereum</div>
                         <div class="balance-info" id="to-balance">Balance: --</div>
                     </div>
                 </div>
@@ -394,7 +394,7 @@
         </div>
 
         <button class="bridge-btn" id="bridge-btn" onclick="executeBridge()" disabled>
-            <span id="bridge-btn-text">🔥 Burn WETH & Mint wSOL</span>
+            <span id="bridge-btn-text">🔥 Lock SOL & Mint wSOL</span>
         </button>
 
         <div class="bridge-info">
@@ -415,7 +415,7 @@
         <div class="transaction-status" id="tx-status">
             <div class="status-step">
                 <div class="step-icon step-pending" id="step1">1</div>
-                <div>Burning tokens on <span id="burn-chain">Ethereum</span>...</div>
+                <div>Locking tokens on <span id="lock-chain">Solana</span>...</div>
             </div>
             <div class="status-step">
                 <div class="step-icon step-waiting" id="step2">2</div>
@@ -423,13 +423,13 @@
             </div>
             <div class="status-step">
                 <div class="step-icon step-waiting" id="step3">3</div>
-                <div>Minting tokens on <span id="mint-chain">Solana</span>...</div>
+                <div>Minting tokens on <span id="mint-chain">Ethereum</span>...</div>
             </div>
         </div>
     </div>
 
     <script>
-        let bridgeDirection = 'eth-to-sol'; // 'eth-to-sol' or 'sol-to-eth'
+        let bridgeDirection = 'sol-to-wsol'; // 'sol-to-wsol' or 'wsol-to-sol'
         let fromConnected = false;
         let toConnected = false;
         let fromBalance = 0;
@@ -437,56 +437,56 @@
 
         // Mock balances
         const mockBalances = {
-            eth: { weth: 1250.75, wsol: 0 },
-            sol: { wsol: 500.25, weth: 0 }
+            sol: { sol: 125.75 },
+            eth: { wsol: 50.25 }
         };
 
         function updateUI() {
-            if (bridgeDirection === 'eth-to-sol') {
-                // ETH to SOL
-                document.getElementById('from-icon').textContent = 'ETH';
-                document.getElementById('from-icon').className = 'chain-icon ethereum';
-                document.getElementById('from-name').textContent = 'Ethereum';
-                document.getElementById('from-token').textContent = 'WETH';
-                document.getElementById('from-balance').textContent = `Balance: ${mockBalances.eth.weth} WETH`;
-
-                document.getElementById('to-icon').textContent = 'SOL';
-                document.getElementById('to-icon').className = 'chain-icon solana';
-                document.getElementById('to-name').textContent = 'Solana';
-                document.getElementById('to-token').textContent = 'wSOL';
-                document.getElementById('to-balance').textContent = `Balance: ${mockBalances.sol.wsol} wSOL`;
-
-                document.getElementById('bridge-btn-text').textContent = '🔥 Burn WETH & Mint wSOL';
-                document.getElementById('burn-chain').textContent = 'Ethereum';
-                document.getElementById('mint-chain').textContent = 'Solana';
-
-                fromBalance = mockBalances.eth.weth;
-            } else {
-                // SOL to ETH
+            if (bridgeDirection === 'sol-to-wsol') {
+                // SOL to wSOL (Solana to Ethereum)
                 document.getElementById('from-icon').textContent = 'SOL';
                 document.getElementById('from-icon').className = 'chain-icon solana';
                 document.getElementById('from-name').textContent = 'Solana';
-                document.getElementById('from-token').textContent = 'wSOL';
-                document.getElementById('from-balance').textContent = `Balance: ${mockBalances.sol.wsol} wSOL`;
+                document.getElementById('from-token').textContent = 'SOL';
+                document.getElementById('from-balance').textContent = `Balance: ${mockBalances.sol.sol} SOL`;
 
                 document.getElementById('to-icon').textContent = 'ETH';
                 document.getElementById('to-icon').className = 'chain-icon ethereum';
                 document.getElementById('to-name').textContent = 'Ethereum';
-                document.getElementById('to-token').textContent = 'WETH';
-                document.getElementById('to-balance').textContent = `Balance: ${mockBalances.eth.weth} WETH`;
+                document.getElementById('to-token').textContent = 'wSOL';
+                document.getElementById('to-balance').textContent = `Balance: ${mockBalances.eth.wsol} wSOL`;
 
-                document.getElementById('bridge-btn-text').textContent = '🔥 Burn wSOL & Mint WETH';
-                document.getElementById('burn-chain').textContent = 'Solana';
+                document.getElementById('bridge-btn-text').textContent = '🔒 Lock SOL & Mint wSOL';
+                document.getElementById('lock-chain').textContent = 'Solana';
                 document.getElementById('mint-chain').textContent = 'Ethereum';
 
-                fromBalance = mockBalances.sol.wsol;
+                fromBalance = mockBalances.sol.sol;
+            } else {
+                // wSOL to SOL (Ethereum to Solana)
+                document.getElementById('from-icon').textContent = 'ETH';
+                document.getElementById('from-icon').className = 'chain-icon ethereum';
+                document.getElementById('from-name').textContent = 'Ethereum';
+                document.getElementById('from-token').textContent = 'wSOL';
+                document.getElementById('from-balance').textContent = `Balance: ${mockBalances.eth.wsol} wSOL`;
+
+                document.getElementById('to-icon').textContent = 'SOL';
+                document.getElementById('to-icon').className = 'chain-icon solana';
+                document.getElementById('to-name').textContent = 'Solana';
+                document.getElementById('to-token').textContent = 'SOL';
+                document.getElementById('to-balance').textContent = `Balance: ${mockBalances.sol.sol} SOL`;
+
+                document.getElementById('bridge-btn-text').textContent = '🔥 Burn wSOL & Unlock SOL';
+                document.getElementById('lock-chain').textContent = 'Ethereum';
+                document.getElementById('mint-chain').textContent = 'Solana';
+
+                fromBalance = mockBalances.eth.wsol;
             }
 
             updateBridgeButton();
         }
 
         function swapDirection() {
-            bridgeDirection = bridgeDirection === 'eth-to-sol' ? 'sol-to-eth' : 'eth-to-sol';
+            bridgeDirection = bridgeDirection === 'sol-to-wsol' ? 'wsol-to-sol' : 'sol-to-wsol';
 
             // Reset connections
             fromConnected = false;
@@ -509,9 +509,9 @@
 
         function connectFromWallet() {
             // Mock connection
-            const mockAddress = bridgeDirection === 'eth-to-sol' ?
-                '0x742d35Cc6634C0532925a3b8D0Ac6d0B4bbA9D88' :
-                '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+            const mockAddress = bridgeDirection === 'sol-to-wsol' ?
+                '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU' :
+                '0x742d35Cc6634C0532925a3b8D0Ac6d0B4bbA9D88';
 
             document.getElementById('from-address').textContent =
                 mockAddress.slice(0, 6) + '...' + mockAddress.slice(-4);
@@ -524,9 +524,9 @@
 
         function connectToWallet() {
             // Mock connection
-            const mockAddress = bridgeDirection === 'eth-to-sol' ?
-                '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU' :
-                '0x742d35Cc6634C0532925a3b8D0Ac6d0B4bbA9D88';
+            const mockAddress = bridgeDirection === 'sol-to-wsol' ?
+                '0x742d35Cc6634C0532925a3b8D0Ac6d0B4bbA9D88' :
+                '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 
             document.getElementById('to-address').textContent =
                 mockAddress.slice(0, 6) + '...' + mockAddress.slice(-4);
@@ -568,7 +568,16 @@
             const bridgeBtn = document.getElementById('bridge-btn');
             bridgeBtn.disabled = true;
 
-            // Step 1: Burning
+            // Update step text based on direction
+            const step1Text = bridgeDirection === 'sol-to-wsol' ? 'Locking' : 'Burning';
+            const step3Text = bridgeDirection === 'sol-to-wsol' ? 'Minting' : 'Unlocking';
+            
+            document.querySelector('.status-step:first-child div:last-child').textContent = 
+                `${step1Text} tokens on ${document.getElementById('lock-chain').textContent}...`;
+            document.querySelector('.status-step:last-child div:last-child').textContent = 
+                `${step3Text} tokens on ${document.getElementById('mint-chain').textContent}...`;
+
+            // Step 1: Lock/Burn
             document.getElementById('step1').classList.remove('step-waiting');
             document.getElementById('step1').classList.add('step-pending');
 
@@ -589,7 +598,7 @@
                 document.getElementById('step2').classList.add('step-complete');
                 document.getElementById('step2').textContent = '✓';
 
-                // Step 3: Minting
+                // Step 3: Mint/Unlock
                 document.getElementById('step3').classList.remove('step-waiting');
                 document.getElementById('step3').classList.add('step-pending');
             }, 4000);
@@ -601,12 +610,12 @@
                 document.getElementById('step3').textContent = '✓';
 
                 // Update balances
-                if (bridgeDirection === 'eth-to-sol') {
-                    mockBalances.eth.weth -= parseFloat(amount);
-                    mockBalances.sol.wsol += parseFloat(amount);
+                if (bridgeDirection === 'sol-to-wsol') {
+                    mockBalances.sol.sol -= parseFloat(amount);
+                    mockBalances.eth.wsol += parseFloat(amount);
                 } else {
-                    mockBalances.sol.wsol -= parseFloat(amount);
-                    mockBalances.eth.weth += parseFloat(amount);
+                    mockBalances.eth.wsol -= parseFloat(amount);
+                    mockBalances.sol.sol += parseFloat(amount);
                 }
 
                 updateUI();
