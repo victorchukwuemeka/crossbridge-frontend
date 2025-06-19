@@ -5,9 +5,12 @@ import { WalletBalance } from './components/WalletBalance';
 import { BridgeForm } from './components/BridgeForm';
 import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
-//import './App.css';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-//import { useWallet } from '@solana/wallet-adapter-react';
+import { EthereumWsolBalance } from './components/EthereumWsolBalance'; // Ethereum WSOL balanc
+
+import './App.css';
+
+import { useConnect, useAccount, useDisconnect } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 
 
@@ -17,24 +20,12 @@ export default function App() {
   
 
   // Ethereum wallet hooks
-  //const { address: ethAddress, isConnected: ethConnected } = useAccount();
-  const { connect: connectEvm, connectors } = useConnect();
-  const { disconnect: disconnectEvm } = useDisconnect();
+  // const { connect } = useConnect();
+   // Ethereum wallet hooks
+  const { connect, isPending, error } = useConnect();
+  const { address: ethAddress, isConnected: ethConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
-  // Get MetaMask connector
-  const metaMaskConnector = connectors.find(
-    (connector) => connector.name === 'MetaMask'
-  );
-
-  const handleEthConnect = () => {
-    if (metaMaskConnector) {
-      connectEvm({ connector: metaMaskConnector });
-    }
-  };
-
-  const handleEthDisconnect = () => {
-    disconnectEvm();
-  };
   
 
   useEffect(() => {
@@ -51,18 +42,65 @@ export default function App() {
     loadTransactionInfo();
   }, []);
 
+   const handleEthConnect = async () => {
+    try {
+      setWalletError('');
+      await connect({ connector: injected() });
+    } catch (err) {
+      console.error('Connection error:', err);
+      setWalletError('Failed to connect Ethereum wallet');
+    }
+  };
+
+   // Log connection status for debugging
+  useEffect(() => {
+    console.log('Ethereum connection status:', { ethConnected, ethAddress, isPending, error });
+  }, [ethConnected, ethAddress, isPending, error]);
+
   return (
     <div className="app-container">
       <div className="main-content">
         <header className="header">
           <div className="logo">CROSSBRIDGE</div>
-          {/**wallet section */}
+          {/** solana wallet section */}
           <WalletMultiButton className="wallet-button" />
+          
+          {/** ethereum wallet section */}
+          <div className="eth-wallet-section">
+             {!ethConnected ? (
+              <button 
+                onClick={handleEthConnect}
+                disabled={isPending}
+                className="eth-connect-button"
+              >
+                {isPending ? 'Connecting...' : 'Connect Ethereum'}
+              </button>
+            ) : (
+              <div className="eth-wallet-connected">
+                <span>ETH: {ethAddress?.slice(0, 6)}...{ethAddress?.slice(-4)}</span>
+                <button onClick={() => disconnect()} className="disconnect-button">
+                  Disconnect
+                </button>
+              </div>
+            )}
+          </div>
+            {/* Error display */}
+          {(walletError || error) && (
+            <div className="error-message">
+              Error: {walletError || error?.message}
+            </div>
+          )}
+    
         </header>
 
 
         <div className="card">
+          {/** display both etherum and solana balances */}
+           <EthereumWsolBalance />
+           <br />
+
           <WalletBalance/>
+          
           <BridgeForm
             onTransactionComplete={() => {
               setTimeout(() => window.location.reload(), 2000);

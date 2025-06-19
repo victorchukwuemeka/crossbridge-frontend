@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-//import './index.css';
+import './index.css';
 
 //import for the solana wallet 
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
@@ -9,7 +9,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
-//import '@solana/wallet-adapter-react-ui/styles.css';
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
 const network = WalletAdapterNetwork.Devnet;
@@ -23,13 +23,17 @@ const wallets = [
 
 
 // Ethereum (Wagmi)
-import { createConfig, http, injected, WagmiProvider } from 'wagmi'
+import { createConfig, http, WagmiProvider } from 'wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 import { metaMask, walletConnect } from 'wagmi/connectors'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
-
+//import { WagmiConfig, createConfig, configureChains } from 'wagmi';
+//import { sepolia, mainnet } from 'wagmi/chains';
+//import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+//import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+//import { publicProvider } from 'wagmi/providers/public';
+//import { alchemyProvider } from 'wagmi/providers/alchemy';
+// Configure chains (only mainnet for simplic
+// Minimal setup - just public provider
 
 //ethereum config 
 const  wagmiConfig =  createConfig({
@@ -39,7 +43,6 @@ const  wagmiConfig =  createConfig({
     [sepolia.id]:http()
   },
   connectors:[
-    injected(),
     metaMask(),
     walletConnect({
        projectId: 'd059b17b54b65e1a02c16aab01472f18',
@@ -50,20 +53,15 @@ const  wagmiConfig =  createConfig({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-     <QueryClientProvider client={queryClient}>
-      <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={wagmiConfig}>
       <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}   autoConnect>
         <WalletModalProvider>
-          <App/>
+          <App />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
     </WagmiProvider>
-     </QueryClientProvider>
-    
-      
-    
     
   </React.StrictMode>
 );
