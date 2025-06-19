@@ -57,102 +57,247 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
       setLoading(false);
     }
   };
-  return (    <div className="bridge-form">
-      <h2 className="text-gradient">Bridge Your Assets</h2>
-      
-      <div className="balance-display glass-card">
-        <div>
-          <span className="label">Available Balance</span>
-          <div className="balance-amount">{balance ? `${parseFloat(balance).toFixed(4)} SOL` : '0.0000 SOL'}</div>
-        </div>
-        <div className="network-badge">
-          <span className="status-dot"></span>
-          Solana Network
-        </div>
-      </div>
 
-      <div className="input-container">
-        <input
-          type="number"
-          step="0.001"
-          placeholder="Enter amount to bridge"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          style={{
-            padding: "1rem",
-            width: "100%",
-            marginBottom: "0.2rem",
-            fontSize: "1rem",
-            paddingRight: "60px"
-          }}
-        />
-        
-        {balance && (
-          <button
-            onClick={setMaxAmount}
+  return (
+    <div style={{
+      maxWidth: '480px',
+      margin: '0 auto',
+      padding: '1rem'
+    }}>
+      {/* Main Form Card */}
+      <div style={{
+        background: 'rgba(30, 30, 30, 0.95)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
+        padding: '1.25rem'
+      }}>
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{ fontSize: '14px', color: '#ccc' }}>Bridge</div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontSize: '13px',
+            color: '#ccc',
+            padding: '6px 12px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '20px'
+          }}>
+            <span style={{
+              width: '6px',
+              height: '6px',
+              background: '#14F195',
+              borderRadius: '50%',
+              display: 'inline-block'
+            }}></span>
+            Solana
+          </div>
+        </div>
+
+        {/* Amount Input Section */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderRadius: '12px',
+          padding: '1rem',
+          marginBottom: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.05)'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '8px'
+          }}>
+            <span style={{ fontSize: '13px', color: '#ccc' }}>Amount</span>
+            <span style={{ fontSize: '13px', color: '#ccc' }}>
+              Balance: {balance ? parseFloat(balance).toFixed(4) : '0'} SOL
+            </span>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <input
+              type="number"
+              step="0.001"
+              placeholder="0.0"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px 0',
+                border: 'none',
+                background: 'transparent',
+                fontSize: '20px',
+                color: '#fff',
+                outline: 'none',
+                caretColor: 'transparent'
+              }}
+            />
+            <button
+              onClick={setMaxAmount}
+              style={{
+                position: 'absolute',
+                right: '0',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                padding: '4px 8px',
+                fontSize: '12px',
+                color: '#ccc',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              MAX
+            </button>
+          </div>
+        </div>
+
+        {/* Address Input Section */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderRadius: '12px',
+          padding: '1rem',
+          marginBottom: '1rem',
+          border: '1px solid rgba(255, 255, 255, 0.05)'
+        }}>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontSize: '13px', color: '#ccc' }}>Recipient (Ethereum)</span>
+          </div>
+          <input
+            type="text"
+            placeholder="0x..."
+            value={ethAddress}
+            onChange={(e) => setEthAddress(e.target.value)}
             style={{
-              position: "absolute",
-              right: "8px",
-              top: "8px",
-              padding: "0.25rem 0.5rem",
-              fontSize: "0.8rem",
-              background: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer"
+              width: '100%',
+              padding: '8px 0',
+              border: 'none',
+              background: 'transparent',
+              fontSize: '15px',
+              fontFamily: 'monospace',
+              color: '#fff',
+              outline: 'none',
+              caretColor: 'transparent'
             }}
-          >
-            MAX
-          </button>
-        )}
-      </div>
-      
-      {balance && (
-        <div style={{ fontSize: "0.8rem", color: "#666", marginBottom: "1rem", textAlign: "right" }}>
-          Available: {parseFloat(balance).toFixed(4)} SOL
+          />
         </div>
-      )}
 
-      <input
-        type="text"
-        placeholder="Ethereum Address (0x...)"
-        value={ethAddress}
-        onChange={(e) => setEthAddress(e.target.value)}
-        style={{
-          padding: "1rem",
-          width: "100%",
-          marginBottom: "1rem",
-          fontSize: "1rem",
-        }}
-      />      <div className="transaction-details">
-        <div className="detail-row">
-          <span>Bridge Fee</span>
-          <span>0.001 SOL</span>
+        {/* Transaction Summary */}
+        <div style={{
+          padding: '12px',
+          marginBottom: '1rem',
+          fontSize: '13px',
+          color: '#ccc',
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderRadius: '12px',
+          border: '1px solid rgba(255, 255, 255, 0.05)'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '8px'
+          }}>
+            <span>Bridge Fee</span>
+            <span>0.001 SOL</span>
+          </div>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '8px'
+          }}>
+            <span>Network Fee</span>
+            <span>~0.0005 SOL</span>
+          </div>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingTop: '8px',
+            marginTop: '8px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            color: '#fff',
+            fontWeight: '500'
+          }}>
+            <span>You will receive</span>
+            <span>{amount ? `${(parseFloat(amount) - 0.0015).toFixed(4)} wSOL` : '0.0000 wSOL'}</span>
+          </div>
         </div>
-        <div className="detail-row">
-          <span>Network Fee</span>
-          <span>~0.0005 SOL</span>
-        </div>
-        <div className="detail-row total">
-          <span>You will receive</span>
-          <span>{amount ? `${(parseFloat(amount) - 0.0015).toFixed(4)} wSOL` : '0.0000 wSOL'}</span>
-        </div>
+
+        {/* Bridge Button */}
+        <button
+          onClick={handleLockSol}
+          disabled={loading || !wallet.connected}
+          style={{
+            width: '100%',
+            padding: '14px',
+            background: loading || !wallet.connected ? 
+              'rgba(255, 255, 255, 0.05)' : 
+              'linear-gradient(45deg, #9945FF, #14F195)',
+            color: loading || !wallet.connected ? '#666' : 'white',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '500',
+            cursor: loading || !wallet.connected ? 'not-allowed' : 'pointer',
+            transition: 'transform 0.2s'
+          }}
+        >
+          {loading ? (
+            'Processing...'
+          ) : !wallet.connected ? (
+            'Connect Wallet'
+          ) : (
+            'Bridge to Ethereum'
+          )}
+        </button>
       </div>
 
-      <button
-        className="action-button"
-        onClick={handleLockSol}
-        disabled={loading || !wallet.connected}
-      >
-        {loading ? (
-          <span className="loading">Processing...</span>
-        ) : !wallet.connected ? (
-          'Connect Wallet to Bridge'
-        ) : (
-          'Bridge SOL → wSOL'
-        )}
-      </button>
+      {/* Footer */}
+      <div style={{
+        marginTop: '1rem',
+        padding: '1rem',
+        background: 'rgba(30, 30, 30, 0.8)',
+        borderRadius: '12px',
+        fontSize: '13px',
+        color: '#ccc',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        border: '1px solid rgba(255, 255, 255, 0.05)'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px'
+        }}>
+          <span style={{
+            width: '6px',
+            height: '6px',
+            background: '#14F195',
+            borderRadius: '50%'
+          }}></span>
+          <span>Estimated time: ~15 minutes</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px'
+        }}>
+          <span style={{
+            width: '6px',
+            height: '6px',
+            background: '#14F195',
+            borderRadius: '50%'
+          }}></span>
+          <span>Bridge powered by CrossBridge Protocol</span>
+        </div>
+      </div>
     </div>
   );
 }
