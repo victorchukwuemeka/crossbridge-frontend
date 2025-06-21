@@ -1,6 +1,9 @@
 import {Contract, ethers} from 'ethers';
 
 //initialize the provider 
+// i'm using the initialize  from the wallet
+// so the function is not in use yet 
+// but don't touch it victor .  
 export const initializeProvider = async (rpcUrl:string , privateKey:string) => {
     const provider = new ethers.JsonRpcProvider(rpcUrl);
     const signer = new ethers.Wallet(privateKey, provider);
@@ -9,7 +12,11 @@ export const initializeProvider = async (rpcUrl:string , privateKey:string) => {
 }
 
 //loading the abi of the smart contract
-export const loadContract = async (contractAddress:string, abi:[], signer:ethers.Wallet) => {
+export const loadContract = async (
+  contractAddress:string,
+  abi:ethers.JsonFragment[],
+  signer:ethers.Signer
+) => {
     // Check if contract exists at the address
     if (!signer.provider) {
        throw new Error('Signer has no provider attached');
@@ -27,8 +34,8 @@ export const validateBurn = async (
     contract: ethers.Contract, 
     userAddress:string, 
     burnAmount:string,
-    provider: ethers.JsonRpcProvider
-) => {
+    provider: ethers.Provider
+):Promise<bigint> => {
     
     //check eth balance 
     const ethBalance = await provider.getBalance(userAddress);
@@ -42,6 +49,7 @@ export const validateBurn = async (
     if (tokenBalance < burnAmountWei) {
         throw new Error('Insufficient TOken');
     }
+    return burnAmountWei;
 
 }
 
@@ -49,7 +57,7 @@ export const validateBurn = async (
 export const estimateGasCost = async (
     contract:ethers.Contract,
     burnAmountWei:bigint,
-    provider: ethers.JsonRpcProvider
+    provider: ethers.Provider
 ) => {
     //estimate gas limit 
     const gasLimit = await contract.burn.estimateGas(burnAmountWei);
@@ -74,7 +82,7 @@ export const prepareBurnTransaction = async (
     burnAmountWei: bigint,
     gasLimit : bigint,
     gasPrice : bigint,
-    provider: ethers.JsonRpcProvider,
+    provider: ethers.Provider,
     signerAddress: string
 ) => {
      
@@ -99,7 +107,7 @@ export const prepareBurnTransaction = async (
 }
 
 //just sending the transaction
-export const executeBurn = async (transaction:any, signer:ethers.Wallet) => {
+export const executeBurn = async (transaction:any, signer:ethers.Signer) => {
     const txResponse = await signer.sendTransaction(transaction);
     return txResponse.hash;
 }
@@ -107,7 +115,7 @@ export const executeBurn = async (transaction:any, signer:ethers.Wallet) => {
 //checking if our transaction went through
 export const monitorTransaction = async (
   txHash: string,
-  provider: ethers.JsonRpcProvider
+  provider: ethers.Provider
 ) => {
   // Wait for transaction confirmation
   const receipt = await provider.waitForTransaction(txHash, 1);

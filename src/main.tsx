@@ -61,9 +61,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ConnectionProvider>
     </WagmiProvider>
      </QueryClientProvider>
-    
-      
-    
-    
+
   </React.StrictMode>
 );

@@ -8,7 +8,9 @@ import {
   getCompleteTransactionInfo,
   type CompleteTransactionInfo,
 } from "./ethereum/ethereumWsolContract";
-import { EthereumWsolBalance } from "./components/EthereumWsolBalance"; // Ethereum WSOL balanc
+import { EthereumWsolBalance } from "./components/EthereumWsolBalance"; 
+//import { BurnTokenComponent } from "./components/BurnTokenComponent";
+import BurnTokenComponent from "./components/BurnTokenComponent";
 
 import "./App.css";
 
@@ -324,6 +326,85 @@ export default function App() {
             <WalletBalance />
           </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {/**burn the wsol section  */}
+        <div>
+        
+             <BurnTokenComponent/>
+        
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {/* Footer */}
         <footer
