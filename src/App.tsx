@@ -4,7 +4,7 @@ import { WalletBalance } from './components/WalletBalance';
 import { BridgeForm } from './components/BridgeForm';
 import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
-import './App.css'; // Import the CSS file
+//import './App.css'; // Import the CSS file
 
 
 
