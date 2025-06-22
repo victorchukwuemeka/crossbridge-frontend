@@ -17,6 +17,7 @@ const BurnTokenComponent = () => {
   const [error, setError] = useState('');
   const [walletConnected, setWalletConnected] = useState(false);
   const [userAddress, setUserAddress] = useState('');
+  const [gasfee, setGasFee] = useState('');
   
   const CONTRACT_ADDRESS = '0xFe58E38FF0bE0055551AAd2699287D81461c31E0';
   const RPC_URL = 'https://rpc.sepolia.org';
@@ -65,6 +66,7 @@ const BurnTokenComponent = () => {
       // Estimate gas
       const { gasLimit, gasPrice } = await estimateGasCost(contract, burnAmountWei, wallet_provider);
       
+      setGasFee('gasPrice');
       // Prepare transaction
       const transaction = await prepareBurnTransaction(
         contract,
@@ -75,6 +77,7 @@ const BurnTokenComponent = () => {
         userAddress
       );
       
+
       // Execute burn
       const hash = await executeBurn(transaction, signer);
       setTxHash(hash);
@@ -145,7 +148,10 @@ const BurnTokenComponent = () => {
           </button>
         </div>
       )}
-
+      <div>
+       <p>gasFee</p> {gasfee}
+      </div>
+       
       {/* Burn Section */}
       <div style={{ marginBottom: '20px' }}>
         <input
