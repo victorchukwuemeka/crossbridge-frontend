@@ -6,6 +6,8 @@ import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
 import './App.css'; // Import the CSS file
 
+
+
 export default function App() {
   const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
   const [solAmount, setSolAmount] = useState<number | null>(null);
