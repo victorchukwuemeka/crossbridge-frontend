@@ -5,6 +5,9 @@ import { BridgeForm } from './components/BridgeForm';
 import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
 //import './App.css'; // Import the CSS file
+//import { EthereumWsolBalance } from "./components/EthereumWsolBalance";
+import BurnTokenComponent from "./components/BurnTokenComponent";
+
 
 
 
@@ -72,6 +75,11 @@ export default function App() {
           balance={null}
         />
       </section>
+
+
+      {/* ethereum burn section */}
+       
+       <BurnTokenComponent />
 
       {/* Transaction Info Section */}
       {transactionInfo && (

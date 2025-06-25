@@ -9,6 +9,7 @@ import {
 } from '../ethereum/tokenBurnService';
 import { ABI } from '../ethereum/ABI';
 import { ethers, BrowserProvider } from 'ethers';
+import { EthereumWsolBalance } from "./EthereumWsolBalance";
 
 const BurnTokenComponent = () => {
   const [amount, setAmount] = useState('');
@@ -19,8 +20,8 @@ const BurnTokenComponent = () => {
   const [userAddress, setUserAddress] = useState('');
   const [gasfee, setGasFee] = useState('');
   
-  const CONTRACT_ADDRESS = '0xFe58E38FF0bE0055551AAd2699287D81461c31E0';
-  const RPC_URL = 'https://rpc.sepolia.org';
+  const CONTRACT_ADDRESS = '0x990f31d4359Ee8745D479c873549F5eF44494435';
+  //const RPC_URL = 'https://rpc.sepolia.org';
 
   const handleConnectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -41,7 +42,21 @@ const BurnTokenComponent = () => {
       setError('Please install MetaMask or another wallet provider');
     }
   };
+  
+  const checkEthBalance = async () => {
+    try {
+      const wallet_provider = new BrowserProvider(window.ethereum);
+      const ethBalance = await wallet_provider.getBalance(userAddress);
+      console.log('ETH Balance (wei):', ethBalance.toString());
+      console.log('ETH Balance (ETH):', ethers.formatEther(ethBalance));
+      return ethBalance;
+    } catch (error) {
+      console.error('Error checking ETH balance:', error);
+      throw error;
+    }
+  }
 
+  
   const handleBurn = async () => {
     if (!amount || !userAddress) return;
     
@@ -57,16 +72,31 @@ const BurnTokenComponent = () => {
       const signer = await wallet_provider.getSigner(userAddress);
       console.log('Signer:', signer);
       
+       // Check ETH balance first
+      const ethBalance = await checkEthBalance();
+      console.log('the eth balance:',ethers.formatEther(ethBalance));
       // Load contract
       const contract = await loadContract(CONTRACT_ADDRESS, ABI, signer);
       
       // Validate burn
-      const burnAmountWei = await validateBurn(contract, userAddress, amount, wallet_provider);
+      const burnAmountWei = await validateBurn(
+        contract,
+        userAddress,
+        amount,
+        wallet_provider,
+        ethBalance
+      );
       
       // Estimate gas
       const { gasLimit, gasPrice } = await estimateGasCost(contract, burnAmountWei, wallet_provider);
       
-      setGasFee('gasPrice');
+      console.log('gas limit:', gasLimit);
+      console.log('gas Price:', gasPrice);
+      const totalPrice = gasLimit * gasPrice;
+      console.log('total gas cost in (wie)', totalPrice.toString());
+      console.log('total gas cost in (eth)', ethers.formatEther(totalPrice));
+      //setGasFee('gasPrice');
+      setGasFee(gasPrice.toString());
       // Prepare transaction
       const transaction = await prepareBurnTransaction(
         contract,
@@ -107,6 +137,7 @@ const BurnTokenComponent = () => {
   return (
     <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
       <h2>Burn WSOL Tokens</h2>
+      <p>Your Wsol balance</p> <EthereumWsolBalance/>
       
       {/* Wallet Connection Section */}
       {!walletConnected ? (

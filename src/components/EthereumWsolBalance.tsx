@@ -4,7 +4,7 @@ import { useAccount, useReadContract, useChainId } from 'wagmi';
 import { formatUnits } from 'viem';
 
 // WSOL token configuration
-const WSOL_CONTRACT_ADDRESS = '0xFe58E38FF0bE0055551AAd2699287D81461c31E0' as const;
+const WSOL_CONTRACT_ADDRESS = '0x990f31d4359Ee8745D479c873549F5eF44494435' as const;
 const WSOL_DECIMALS = 9; // WSOL uses 9 decimals
 const SEPOLIA_CHAIN_ID = 11155111; 
 

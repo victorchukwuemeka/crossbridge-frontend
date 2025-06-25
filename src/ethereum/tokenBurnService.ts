@@ -34,21 +34,54 @@ export const validateBurn = async (
     contract: ethers.Contract, 
     userAddress:string, 
     burnAmount:string,
-    provider: ethers.Provider
+    provider: ethers.Provider,
+    ethBalance: bigint
 ):Promise<bigint> => {
     
     //check eth balance 
-    const ethBalance = await provider.getBalance(userAddress);
-    if ( ethBalance < ethers.parseEther("0.01")) {
+    //const ethBalance = await provider.getBalance(userAddress);
+   /* if ( ethBalance < ethers.parseEther("0.01")) {
         throw new Error('Insufficient ETH for gas');
-    }
+    }*/
+     console.log('=== BURN VALIDATION DEBUG ===');
+     console.log('User Address:', userAddress);
+     console.log('Contract Address:', await contract.getAddress());
+     console.log('Burn Amount (input):', burnAmount);
     
+      // Check contract basics
+      try {
+        const contractCode = await provider.getCode(await contract.getAddress());
+        console.log('Contract exists:', contractCode !== '0x');
+      } catch (error) {
+        console.error('Contract code check failed:', error);
+      }
+
     //check the token balance 
-    const tokenBalance = await contract.balanceOf(userAddress);
-    const burnAmountWei = ethers.parseEther(burnAmount);
-    if (tokenBalance < burnAmountWei) {
-        throw new Error('Insufficient TOken');
+    let tokenBalance:bigint = 0n;
+    try {
+      tokenBalance = await contract.balanceOf(userAddress);
+      console.log('Token balance in (wei):', tokenBalance.toString());
+      console.log('Token Balance (formatted):', ethers.formatEther(tokenBalance));
+    } catch (error) {
+      console.error('Failed to get token balance:', error);
+      throw new Error('Failed to get token balance. Is this a valid ERC20 contract?');
     }
+    //const tokenBalance = await contract.balanceOf(userAddress);
+    const burnAmountWei = ethers.parseEther(burnAmount);
+
+    console.log('Burn Amount (wei):', burnAmountWei.toString());
+    console.log('Burn Amount (formatted):', ethers.formatEther(burnAmountWei));
+
+     if (burnAmountWei <= 0) {
+      throw new Error('Burn amount must be greater than 0');
+     }
+
+    if (tokenBalance < burnAmountWei) {
+      throw new Error(
+        `Insufficient tokens. Have: ${ethers.formatEther(tokenBalance)} WSOL, Need: ${ethers.formatEther(burnAmountWei)} WSOL`
+      );
+    }
+
     return burnAmountWei;
 
 }
@@ -57,8 +90,13 @@ export const validateBurn = async (
 export const estimateGasCost = async (
     contract:ethers.Contract,
     burnAmountWei:bigint,
-    provider: ethers.Provider
-) => {
+    provider: ethers.Provider,
+):Promise<{ gasLimit: bigint; gasPrice: bigint; totalGasCost: bigint }> => {
+
+     
+  try {
+    // First try to call the function statically to see if it would work
+     await contract.burn.staticCall(burnAmountWei);
     //estimate gas limit 
     const gasLimit = await contract.burn.estimateGas(burnAmountWei);
     //get current gas price 
@@ -74,6 +112,36 @@ export const estimateGasCost = async (
     gasPrice: gasFeeData.gasPrice,
     totalGasCost
   };
+  } catch (error : any) {
+    console.error('Gas estimation error:', error);
+    
+    // Provide more specific error messages
+    if (error.code === 'CALL_EXCEPTION') {
+      throw new Error('Transaction would fail. Check your token balance and contract state.');
+    }
+    throw error;
+  }
+}
+
+export const verifyContract = async (contract:ethers.Contract):Promise<void> => {
+  try {
+    const fragment = contract.interface.getFunction('burn');
+    if (!fragment) {
+      throw new Error('Contract does not have a burn function');
+    }
+    console.log('Burn function signature:', fragment.format());
+
+    //get contract name/symbol
+    try {
+      const name = contract.name();
+      const symbol = contract.symbol();
+      console.log(`Contract: ${name} (${symbol})`);
+    } catch (error) {
+      console.log('Contract does not implement name/symbol');
+    }
+  } catch (error) {
+    throw new Error('Contract does not have a burn function');
+  }
 }
 
 //arrange the transaction that will be sent , with all the data needed 
@@ -93,7 +161,7 @@ export const prepareBurnTransaction = async (
     );
 
     //transaction data 
-    const txData = await contract.interface.encodeFunctionData('burn', [burnAmountWei]);
+    const txData = await contract.interface.encodeFunctionData('burn', [ burnAmountWei]);
 
     const transaction = {
         to: await contract.getAddress(),
