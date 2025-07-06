@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --primary-gradient: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
   --surface-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
@@ -161,8 +161,9 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(153, 69, 255, 0.2);
 }
+  
+ Wallet Button Overrides --------
 
-/* Wallet Button Overrides */
 .wallet-adapter-button {
   background: var(--primary-gradient) !important;
   padding: 12px 24px !important;
@@ -186,7 +187,7 @@ body {
   font-family: "Nunito Sans", sans-serif !important;
 }
 
-/* Modern Input Styles */
+ Modern Input Styles ------------------------
 .input-container {
   position: relative;
   margin-bottom: 1.5rem;
@@ -221,7 +222,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-/* Balance Display */
+Balance Display -------------------
 .balance-display {
   background: linear-gradient(
     135deg,
@@ -248,7 +249,7 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-text-fill-color: transparent;
 }
 
-/* Action Buttons */
+Action Buttons ---------------
 .action-button {
   background: var(--primary-gradient);
   color: white;
@@ -296,7 +297,7 @@ input[type="number"]::-webkit-outer-spin-button {
   transform: none;
 }
 
-/* Transaction Card Styles */
+Transaction Card Styles --------------
 .transaction-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
@@ -347,7 +348,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #9945ff;
 }
 
-/* Token Selection Button */
+ Token Selection Button --------------
 .token-select-btn {
   display: flex;
   align-items: center;
@@ -377,7 +378,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: white;
 }
 
-/* Progress Steps */
+Progress Steps ---------------
 .progress-steps {
   display: flex;
   justify-content: space-between;
@@ -426,7 +427,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background: rgba(153, 69, 255, 0.1);
   z-index: 0;
 }
-/* Loading Animation */
+ Loading Animation -------------------
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -446,7 +447,7 @@ input[type="number"]::-webkit-outer-spin-button {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Animation Keyframes */
+ Animation Keyframes --------------------------
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -470,7 +471,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-/* Transaction Details */
+ Transaction Details -----------------
 .transaction-details {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 16px;
@@ -525,7 +526,7 @@ input[type="number"]::-webkit-outer-spin-button {
   text-align: center;
 }
 
-/* Network Status Indicator */
+Network Status Indicator ---------------------
 .network-indicator {
   display: flex;
   align-items: center;
@@ -548,7 +549,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: 600;
 }
 
-/* Glass Card Effect */
+Glass Card Effect -------------------------------
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
@@ -578,7 +579,7 @@ input[type="number"]::-webkit-outer-spin-button {
   pointer-events: none;
 }
 
-/* Input Focus Effects */
+Input Focus Effects ---------------------
 .input-focus-effect {
   position: relative;
 }
@@ -606,7 +607,7 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
 }
 
-/* Enhanced Form Elements */
+Enhanced Form Elements ------------------------
 .input-group {
   position: relative;
   margin-bottom: 1.5rem;
@@ -641,7 +642,7 @@ input[type="number"]::-webkit-outer-spin-button {
   gap: 0.5rem;
 }
 
-/* Fee Display */
+ Fee Display -----------------------------------
 .fee-container {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 12px;
@@ -666,7 +667,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #333;
 }
 
-/* Notification Badges */
+ Notification Badges -----------------
 .notification-badge {
   display: inline-flex;
   align-items: center;
@@ -692,7 +693,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #ff4545;
 }
 
-/* Hover Effects */
+ Hover Effects ---------------------
 .hover-lift {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -702,7 +703,7 @@ input[type="number"]::-webkit-outer-spin-button {
   box-shadow: 0 8px 24px rgba(153, 69, 255, 0.15);
 }
 
-/* Bridge Details Section */
+ Bridge Details Section -----------------------------
 .bridge-details {
   background: #ffffff;
   border-radius: 24px;
@@ -814,7 +815,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 1.25rem;
 }
 
-/* Arrow Animation */
+ Arrow Animation ----------------
 .bridge-arrow {
   position: relative;
   height: 40px;
@@ -853,10 +854,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .text-gradient {
   color: #9945ff;
-  /* Fallback color */
+  Fallback color ----------------------
 }
 
-/* Only apply gradient if browser supports it */
+ Only apply gradient if browser supports it 
 @supports (-webkit-background-clip: text) {
   .text-gradient {
     background: linear-gradient(45deg, #9945ff, #14f195);
@@ -874,7 +875,7 @@ input[type="number"]::-webkit-outer-spin-button {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Wallet Adapter Modal Overrides */
+ Wallet Adapter Modal Overrides --------------------------
 .wallet-adapter-modal {
   background: rgba(0, 0, 0, 0.8) !important;
   backdrop-filter: blur(5px) !important;
@@ -998,7 +999,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: 500;
 }
 
-/* Tab System */
+/* Tab System -----------------------------------
 .tabs-container {
   width: 100%;
   margin-bottom: 2rem;
@@ -1075,7 +1076,7 @@ footer {
   border-top: 1px solid var(--accent-color);
 }
 
-/* Responsive design */
+/* Responsive design 
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -1100,5 +1101,362 @@ footer {
   .tab {
     padding: 0.8rem 1.5rem;
     white-space: nowrap;
+  }
+} */
+
+/* src/App.css */
+:root {
+  --primary: #c6ee12;         /* Bright lime/neon green */
+  --secondary: #0A0E17;       /* Dark blue/navy blue */
+  --accent: #00D1FF;          /* Cyan accent */
+  --background: #0A0E17;      /* Dark blue background */
+  --card-bg: #0F1722;         /* Slightly lighter card background */
+  --text: #FFFFFF;            /* White text */
+  --text-secondary: #94A3B8;  /* Secondary text */
+  --border: #1E293B;          /* Border color */
+  --success: #00FF9D;         /* Success green */
+  --error: #FF5252;           /* Error red */
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+body {
+  background-color: var(--secondary);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(0, 209, 255, 0.05) 0%, transparent 20%);
+}
+
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.app-header {
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.app-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.tab-container {
+  display: flex;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.tab-button {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.tab-button.active {
+  background: rgba(0, 255, 157, 0.1);
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 255, 157, 0.1);
+}
+
+.main-content {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  animation: slideUp 0.5s ease-out;
+}
+
+.bridge-status {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 1.5rem;
+  background: rgba(0, 255, 157, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 255, 157, 0.1);
+}
+
+.bridge-status h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.status-list li::before {
+  content: "•";
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.burn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.instructions-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.instructions-card {
+  background: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.instructions-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.steps {
+  padding-left: 1.5rem;
+}
+
+.steps li {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.wallet-section {
+  background: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.wallet-section h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.wallet-section p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.burn-form {
+  background: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.amount-input {
+  margin-bottom: 1.5rem;
+}
+
+.amount-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: var(--background);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.input-group input {
+  flex: 1;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  outline: none;
+}
+
+.input-group span {
+  padding: 0 1rem;
+  background-color: var(--border);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--text);
+}
+
+.conversion-rate {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.action-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background-color: #00e68a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+}
+
+.action-button:disabled {
+  background-color: #1E293B;
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.wallet-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.wallet-button {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: var(--secondary);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 220px;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 255, 157, 0.25);
+}
+
+.wallet-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 157, 0.3);
+}
+
+.app-footer {
+  text-align: center;
+  padding: 20px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .app-container {
+    padding: 10px;
+  }
+  
+  .app-title {
+    font-size: 2rem;
+  }
+  
+  .main-content {
+    padding: 18px;
+  }
+  
+  .tab-button {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .wallet-button {
+    padding: 12px 20px;
+    font-size: 0.95rem;
   }
 }
