@@ -210,8 +210,8 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
                     cursor: 'pointer',
                     transition: 'background 0.2s'
                   }}
-                  onMouseOver={(e) => e.target.style.background = '#0FD186'}
-                  onMouseOut={(e) => e.target.style.background = '#14F195'}
+                  onMouseOver={(e) => (e.target as HTMLElement).style.background = '#0FD186'}
+                  onMouseOut={(e) => (e.target as HTMLElement).style.background = '#14F195'}
                 >
                   MAX
                 </button>
@@ -414,12 +414,12 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
             }}
             onMouseOver={(e) => {
               if (!loading && wallet.connected) {
-                e.target.style.transform = 'translateY(-2px)';
+               (e.target as HTMLElement).style.background= 'translateY(-2px)';
               }
             }}
             onMouseOut={(e) => {
               if (!loading && wallet.connected) {
-                e.target.style.transform = 'translateY(0)';
+               (e.target as HTMLElement).style.background = 'translateY(0)';
               }
             }}
           >
@@ -571,7 +571,7 @@ export function BridgeForm({ balance, onTransactionComplete }: BridgeFormProps) 
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes pulse {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.1); }

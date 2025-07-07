@@ -3,11 +3,9 @@ import { useState, useEffect } from 'react';
 import { useAccount, useReadContract } from 'wagmi';
 import { formatUnits } from 'viem';
 
-// WSOL token contract address on Sepolia (you'll need to replace with actual address)
-const WSOL_CONTRACT_ADDRESS = '0xFe58E38FF0bE0055551AAd2699287D81461c31E0'; // Replace with actual WSOL contract
+// WSOL token contract address on Sepolia
+const WSOL_CONTRACT_ADDRESS = '0xFe58E38FF0bE0055551AAd2699287D81461c31E0'; // Replace if needed
 
-
-// Standard ERC-20 ABI for balanceOf and decimals
 const ERC20_ABI = [
   {
     constant: true,
@@ -35,49 +33,37 @@ const ERC20_ABI = [
 export function EthereumWsolBalance() {
   const { address, isConnected } = useAccount();
   const [wsolBalance, setWsolBalance] = useState<string>('0');
-  const WSOL_DECIMALS: number  = 9;
+  const WSOL_DECIMALS: number = 9;
 
   // Read WSOL balance
-  const { 
-    data: balance, 
+  const {
+    data: balance,
     isError: balanceError,
-    isLoading: balanceLoading, 
-    refetch: refetchBalance 
-  } = useReadContract<bigint>({
+    isLoading: balanceLoading,
+    refetch: refetchBalance,
+  } = useReadContract({
     address: WSOL_CONTRACT_ADDRESS as `0x${string}`,
     abi: ERC20_ABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
     query: {
-        enabled: !!address && isConnected,
+      enabled: !!address && isConnected,
     },
   });
 
-  // Read WSOL decimals
-  const decimals = WSOL_DECIMALS;
-
-  // Read token symbol to confirm it's WSOL
+  // Read token symbol
   const { data: symbol } = useReadContract({
     address: WSOL_CONTRACT_ADDRESS as `0x${string}`,
     abi: ERC20_ABI,
     functionName: 'symbol',
-    query:{
-        enabled: true,
+    query: {
+      enabled: true,
     },
   });
 
   useEffect(() => {
-    setWsolBalance(balance ? formatUnits(balance, WSOL_DECIMALS) : '0');
+    setWsolBalance(balance ? formatUnits(balance as bigint, WSOL_DECIMALS) : '0');
   }, [balance]);
-
-  /*useEffect(() => {
-    if (balance && decimals) {
-      const formattedBalance = formatUnits(balance as bigint, decimals as number);
-      setWsolBalance(formattedBalance);
-    } else {
-      setWsolBalance('0');
-    }
-  }, [balance, decimals]);*/
 
   const handleRefresh = () => {
     refetchBalance();
@@ -113,7 +99,6 @@ export function EthereumWsolBalance() {
   return (
     <div className="eth-wsol-balance">
       <div className="balance-info">
-        
         <span>{(symbol as string) || 'WSOL'}</span>
         <span className="balance-value">{parseFloat(wsolBalance).toFixed(4)}</span>
       </div>
