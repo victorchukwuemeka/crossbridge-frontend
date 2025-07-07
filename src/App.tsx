@@ -91,97 +91,9 @@
 //   );
 // }
 
-// // App.tsx
-// import { useState } from 'react';
-// import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-// import { WalletBalance } from './components/WalletBalance';
-// import { BridgeForm } from './components/BridgeForm';
-// import BurnTokenComponent from "./components/BurnTokenComponent";
-// import './App.css';
-
-// export default function App() {
-//   const [activeTab, setActiveTab] = useState<'bridge' | 'burn'>('bridge');
-
-
-//   return (
-//     <div className="app-container">
-//       {/* Header Section */}
-//       <header className="app-header">
-//         <div className="logo">
-//           <div className="logo-icon">
-//             <i className="fas fa-bridge"></i>
-//           </div>
-//           <h1>SOL Bridge</h1>
-//         </div>
-//         <nav>
-//           <ul>
-//             <li><a href="#"><i className="fas fa-home"></i> Home</a></li>
-//             <li><a href="#"><i className="fas fa-history"></i> History</a></li>
-//             <li><a href="#"><i className="fas fa-question-circle"></i> FAQ</a></li>
-//             <li><a href="#"><i className="fas fa-headset"></i> Support</a></li>
-//           </ul>
-//         </nav>
-//       </header>
-
-//       <div className="main-container">
-//         <h1 className="app-title">SOL Bridge</h1>
-//         <p className="app-subtitle">Bridge SOL to WSOL on Ethereum</p>
-
-//         {/* Bridge Options */}
-//         <div className="bridge-options">
-//           <button 
-//             className={`bridge-btn ${activeTab === 'bridge' ? 'active' : ''}`}
-//             onClick={() => setActiveTab('bridge')}
-//           >
-//             <h3>Bridge to WSOL</h3>
-//             <p>Convert SOL to wrapped SOL on Ethereum</p>
-//           </button>
-//           <button 
-//             className={`bridge-btn ${activeTab === 'burn' ? 'active' : ''}`}
-//             onClick={() => setActiveTab('burn')}
-//           >
-//             <h3>Burn to SOL</h3>
-//             <p>Convert WSOL back to SOL on Solana</p>
-//           </button>
-//         </div>
-
-//         {/* Wallet Connection Section */}
-//         <section className="wallet-section card">
-//           <h2>Connect Your Wallet</h2>
-//           <p>Connect your Solana wallet to get started</p>
-//           <WalletMultiButton className="connect-btn">
-//             <i className="fas fa-plug"></i> Connect Wallet
-//           </WalletMultiButton>
-//         </section>
-
-//         {/* Content Sections */}
-//         <section className="content-section">
-//           {activeTab === 'bridge' ? (
-//             <div className="bridge-content">
-//               <WalletBalance />
-//               <BridgeForm 
-//                 onTransactionComplete={() => setTimeout(() => window.location.reload(), 2000)} 
-//                 balance={null} 
-//               />
-//             </div>
-//           ) : (
-//             <BurnTokenComponent />
-//           )}
-//         </section>
-
-//       </div>
-//       {/* Security Note */}
-//         <div className="security-note">
-//           <i className="fas fa-shield-alt"></i>
-//           Bridge SOL ⇔ WSOL securely across chains
-//         </div>
-//     </div>
-//   );
-// }
 
 import { useState, useEffect } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import BridgeStatus from './components/BridgeStatus';
 import BridgeForm from './components/BridgeForm';
 import BurnTokenComponent from "./components/BurnTokenComponent";
 import './App.css';
@@ -230,12 +142,15 @@ export default function App() {
   return (
     <div className="app-container">
       <header className="app-header">
+        {/* Add logo here */}
+        <img 
+          src="/crossbridge-logo.jpg" 
+          alt="CrossBridge Logo"
+          className="app-logo"
+        />
         <h1 className="app-title">CROSSBRIDGE</h1>
         <p className="app-subtitle">Effortless Bridging from Solana to Ethereum and Beyond</p>
       </header>
-
-      {/* Bridge Status - Show in both tabs */}
-      <BridgeStatus />
 
       <div className="tab-container">
         <button 

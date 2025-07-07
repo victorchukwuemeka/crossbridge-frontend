@@ -302,6 +302,8 @@
 //   );
 // }
 
+
+
 import { useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
@@ -328,7 +330,7 @@ export default function BridgeForm({ balance, onTransactionComplete }: BridgeFor
 
   const handleLockSol = async () => {
     setError('');
-    
+
     if (!wallet.connected || !wallet.publicKey) {
       setError("Connect wallet first");
       return;
@@ -369,15 +371,29 @@ export default function BridgeForm({ balance, onTransactionComplete }: BridgeFor
   return (
     <div className="form-container">
       {/* Wallet Connection Section */}
-      <div className="wallet-section">
+      <div className="wallet-section" style={{position: 'relative', zIndex: 1000}}>
         <h2>Connect Your Wallet</h2>
-        <p>Connect your Solana wallet to get started</p>
         <div className="wallet-button-container">
-          <WalletMultiButton className="wallet-button" />
+          <WalletMultiButton 
+  className="wallet-button"
+  style={{
+    background: 'linear-gradient(90deg, var(--primary), var(--accent))',
+    color: 'white',
+    border: 'none',
+    borderRadius: '12px',
+    padding: '14px 28px',
+    fontWeight: '600',
+    fontSize: '1rem',
+    width: '100%',
+    position: 'relative',
+    zIndex: 101
+  }}
+/>
+          {/* <WalletMultiButton className="wallet-button" /> */}
         </div>
       </div>
-      
-      {/* Amount Input */}
+
+
       <div className="amount-input">
         <label>Amount to Bridge</label>
         <div className="input-group">
@@ -388,16 +404,16 @@ export default function BridgeForm({ balance, onTransactionComplete }: BridgeFor
             onChange={(e) => setAmount(e.target.value)}
             disabled={!wallet.connected || loading}
           />
+          <button
+            onClick={setMaxAmount}
+            className="max-button"
+            disabled={!wallet.connected || loading}
+          >
+            MAX
+          </button>
         </div>
-        <button
-          onClick={setMaxAmount}
-          className="max-button"
-          disabled={!wallet.connected || loading}
-        >
-          MAX
-        </button>
       </div>
-      
+
       {/* Address Input */}
       <div className="amount-input">
         <label>Recipient (Ethereum)</label>
@@ -413,46 +429,34 @@ export default function BridgeForm({ balance, onTransactionComplete }: BridgeFor
       </div>
 
       {/* Transaction Summary */}
-      <div className="transaction-summary">
-        <div className="fee-row">
-          <span>Bridge Fee</span>
-          <span>0.001 SOL</span>
-        </div>
-        <div className="fee-row">
-          <span>Network Fee</span>
-          <span>~0.0005 SOL</span>
-        </div>
-        <div className="fee-row total">
-          <span>You will receive</span>
-          <span>
-            {amount ? (parseFloat(amount) - 0.0015).toFixed(4) : '0.0000'} wSOL
-          </span>
-        </div>
+
+      <div className="fee-row">
+        <span>Bridge Fee</span>
+        <span>0.001 SOL</span>
+      </div>
+      <div className="fee-row">
+        <span>Network Fee</span>
+        <span>~0.0005 SOL</span>
+      </div>
+      <div className="fee-row total">
+        <span>You will receive</span>
+        <span>
+          {amount ? (parseFloat(amount) - 0.0015).toFixed(4) : '0.0000'} wSOL
+        </span>
       </div>
 
       {/* Error Message */}
       {error && <div className="error-message">{error}</div>}
 
       {/* Bridge Button */}
-      <button 
+      <button
         className="action-button"
         onClick={handleLockSol}
         disabled={loading || !wallet.connected || !amount || !ethAddress}
       >
-        {loading ? 'Processing...' : 'Bridge Tokens'}
+        {loading ? 'Processing...' : <span className="button-text">Bridge tokens</span>}
       </button>
 
-      {/* Status Footer */}
-      <div className="status-footer">
-        <div className="status-item">
-          <span className="status-dot"></span>
-          <span>Estimated time: 10 seconds</span>
-        </div>
-        <div className="status-item">
-          <span className="status-dot"></span>
-          <span>Bridge powered by CrossBridge Protocol</span>
-        </div>
-      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 //import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { WalletBalance } from './components/WalletBalance';
-import { BridgeForm } from './components/BridgeForm';
+import  BridgeForm  from './components/BridgeForm';
 import { TransactionInfoCard } from './components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
 //import './App.css';
