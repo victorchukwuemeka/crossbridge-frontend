@@ -3,7 +3,7 @@ import {
   SystemProgram,
   Transaction,
   TransactionInstruction,
-  Connection,
+  //Connection,
 } from "@solana/web3.js";
 import type { SendOptions } from "@solana/web3.js";
 import BN from "bn.js";
@@ -14,9 +14,9 @@ import { Buffer } from 'buffer';
 import { sha256 } from 'js-sha256';
 
 // Type for better error handling
-interface SolanaError extends Error {
-  logs?: string[];
-}
+// interface SolanaError extends Error {
+//   logs?: string[];
+// }
 
 // Function to generate Anchor instruction discriminator
 function getInstructionDiscriminator(instructionName: string): Buffer {
