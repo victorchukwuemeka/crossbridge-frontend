@@ -19,8 +19,9 @@ const BurnTokenComponent = () => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [userAddress, setUserAddress] = useState('');
   const [gasfee, setGasFee] = useState('');
+  const [solanaAddress, setSolanaAddress] = useState('');
   
-  const CONTRACT_ADDRESS = '0x990f31d4359Ee8745D479c873549F5eF44494435';
+  const CONTRACT_ADDRESS = '0x81CAD7CC4D6e972b598674201d8d33efD8973445';
   //const RPC_URL = 'https://rpc.sepolia.org';
 
   const handleConnectWallet = async () => {
@@ -82,13 +83,14 @@ const BurnTokenComponent = () => {
       const burnAmountWei = await validateBurn(
         contract,
         userAddress,
+        solanaAddress,
         amount,
         wallet_provider,
         ethBalance
       );
       
       // Estimate gas
-      const { gasLimit, gasPrice } = await estimateGasCost(contract, burnAmountWei, wallet_provider);
+      const { gasLimit, gasPrice } = await estimateGasCost(contract, burnAmountWei,solanaAddress, wallet_provider);
       
       console.log('gas limit:', gasLimit);
       console.log('gas Price:', gasPrice);
@@ -101,6 +103,7 @@ const BurnTokenComponent = () => {
       const transaction = await prepareBurnTransaction(
         contract,
         burnAmountWei,
+        solanaAddress,
         gasLimit,
         gasPrice,
         wallet_provider,
@@ -132,6 +135,7 @@ const BurnTokenComponent = () => {
     setAmount('');
     setTxHash('');
     setError('');
+    setSolanaAddress('');
   };
 
   return (
@@ -185,6 +189,23 @@ const BurnTokenComponent = () => {
        
       {/* Burn Section */}
       <div style={{ marginBottom: '20px' }}>
+
+        <input
+          type="text"
+          value={solanaAddress}
+          onChange={(e) => setSolanaAddress(e.target.value)}
+          placeholder="Solana address (e.g., 5Fwc...xyz123)"
+          disabled={!walletConnected || isLoading}
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '5px',
+            fontSize: '16px'
+          }}
+        />
+
         <input
           type="number"
           value={amount}
@@ -203,15 +224,15 @@ const BurnTokenComponent = () => {
         
         <button 
           onClick={handleBurn} 
-          disabled={isLoading || !amount || !walletConnected}
+          disabled={isLoading || !amount || !walletConnected || !solanaAddress}
           style={{
             width: '100%',
             padding: '12px',
-            backgroundColor: walletConnected && amount && !isLoading ? '#2196F3' : '#ccc',
+            backgroundColor: walletConnected && amount && !solanaAddress && !isLoading? '#2196F3' : '#ccc',
             color: 'white',
             border: 'none',
             borderRadius: '5px',
-            cursor: walletConnected && amount && !isLoading ? 'pointer' : 'not-allowed',
+            cursor: walletConnected && amount && !isLoading && !solanaAddress? 'pointer' : 'not-allowed',
             fontSize: '16px',
             fontWeight: 'bold'
           }}

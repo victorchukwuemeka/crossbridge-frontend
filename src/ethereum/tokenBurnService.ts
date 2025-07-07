@@ -32,7 +32,8 @@ export const loadContract = async (
 //making sure we balances and fees are enough more like validation
 export const validateBurn = async (
     contract: ethers.Contract, 
-    userAddress:string, 
+    userAddress:string,
+    solanaAddress:string,
     burnAmount:string,
     provider: ethers.Provider,
     ethBalance: bigint
@@ -47,6 +48,17 @@ export const validateBurn = async (
      console.log('User Address:', userAddress);
      console.log('Contract Address:', await contract.getAddress());
      console.log('Burn Amount (input):', burnAmount);
+
+     //validate solana address
+     if (!solanaAddress || solanaAddress.length < 32 || solanaAddress.length > 44 ) {
+      throw new Error("Invalid solana format");
+     }
+
+     // ✅ Basic validation - check if it looks like a base58 string
+     const base58Regex = /^[1-9A-HJ-NP-Za-km-z]+$/;
+     if (!base58Regex.test(solanaAddress)) {
+         throw new Error('Invalid Solana address - must be base58 encoded');
+     }
     
       // Check contract basics
       try {
@@ -61,25 +73,25 @@ export const validateBurn = async (
     try {
       tokenBalance = await contract.balanceOf(userAddress);
       console.log('Token balance in (wei):', tokenBalance.toString());
-      console.log('Token Balance (formatted):', ethers.formatEther(tokenBalance));
+      console.log('Token Balance (formatted):', ethers.formatUnits(tokenBalance, 9));
     } catch (error) {
       console.error('Failed to get token balance:', error);
       throw new Error('Failed to get token balance. Is this a valid ERC20 contract?');
     }
     //const tokenBalance = await contract.balanceOf(userAddress);
-    const burnAmountWei = ethers.parseEther(burnAmount);
+    const burnAmountWei = ethers.parseUnits(burnAmount,9);
 
     console.log('Burn Amount (wei):', burnAmountWei.toString());
-    console.log('Burn Amount (formatted):', ethers.formatEther(burnAmountWei));
+    console.log('Burn Amount (formatted):', ethers.formatUnits(burnAmountWei,9));
 
      if (burnAmountWei <= 0) {
       throw new Error('Burn amount must be greater than 0');
      }
 
-    if (tokenBalance < burnAmountWei) {
-      throw new Error(
-        `Insufficient tokens. Have: ${ethers.formatEther(tokenBalance)} WSOL, Need: ${ethers.formatEther(burnAmountWei)} WSOL`
-      );
+     if (tokenBalance < burnAmountWei) {
+        throw new Error(
+            `Insufficient tokens. Have: ${ethers.formatUnits(tokenBalance, 9)} wSOL, Need: ${ethers.formatUnits(burnAmountWei, 9)} wSOL`
+        );
     }
 
     return burnAmountWei;
@@ -90,15 +102,16 @@ export const validateBurn = async (
 export const estimateGasCost = async (
     contract:ethers.Contract,
     burnAmountWei:bigint,
+    solanaAddress:string,
     provider: ethers.Provider,
 ):Promise<{ gasLimit: bigint; gasPrice: bigint; totalGasCost: bigint }> => {
 
      
   try {
     // First try to call the function statically to see if it would work
-     await contract.burn.staticCall(burnAmountWei);
+     await contract.burn.staticCall(burnAmountWei,solanaAddress);
     //estimate gas limit 
-    const gasLimit = await contract.burn.estimateGas(burnAmountWei);
+    const gasLimit = await contract.burn.estimateGas(burnAmountWei, solanaAddress);
     //get current gas price 
     const gasFeeData = await provider.getFeeData();
     
@@ -148,6 +161,7 @@ export const verifyContract = async (contract:ethers.Contract):Promise<void> => 
 export const prepareBurnTransaction = async (
     contract: ethers.Contract,
     burnAmountWei: bigint,
+    solanaAddress:string,
     gasLimit : bigint,
     gasPrice : bigint,
     provider: ethers.Provider,
@@ -161,7 +175,7 @@ export const prepareBurnTransaction = async (
     );
 
     //transaction data 
-    const txData = await contract.interface.encodeFunctionData('burn', [ burnAmountWei]);
+    const txData = await contract.interface.encodeFunctionData('burn', [ burnAmountWei,solanaAddress]);
 
     const transaction = {
         to: await contract.getAddress(),

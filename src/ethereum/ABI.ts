@@ -1,6 +1,6 @@
 import type { JsonFragment } from "ethers";
 
- export const ABI:JsonFragment[] =[
+  export const ABI:JsonFragment[] = [
     {
       "inputs": [
         {
@@ -159,6 +159,12 @@ import type { JsonFragment } from "ethers";
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "solanaAddress",
+          "type": "string"
         }
       ],
       "name": "Burned",
@@ -281,6 +287,11 @@ import type { JsonFragment } from "ethers";
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "solanaAddress",
+          "type": "string"
         }
       ],
       "name": "burn",
@@ -299,13 +310,6 @@ import type { JsonFragment } from "ethers";
         }
       ],
       "stateMutability": "pure",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "deposit",
-      "outputs": [],
-      "stateMutability": "payable",
       "type": "function"
     },
     {
@@ -474,22 +478,5 @@ import type { JsonFragment } from "ethers";
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "withdraw",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "stateMutability": "payable",
-      "type": "receive"
     }
-  ] as const 
+  ]as const
