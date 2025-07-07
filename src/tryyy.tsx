@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { WalletBalance } from "./components/WalletBalance";
-import { BridgeForm } from "./components/BridgeForm";
+import BridgeForm from "./components/BridgeForm";
 import { TransactionInfoCard } from "./components/TransactionInfoCard";
 import {
   getCompleteTransactionInfo,
@@ -21,8 +21,8 @@ export default function App() {
   const [walletError, setWalletError] = useState<string>("");
 
   // Solana wallet hook - renamed to avoid conflicts
-  const { 
-    connected: solConnected, 
+  const {
+    connected: solConnected,
     publicKey: solPublicKey,
     connect: solConnect,
     disconnect: solDisconnect
@@ -149,8 +149,8 @@ export default function App() {
           {/* Solana Wallet */}
           <WalletMultiButton />
           <button onClick={() => solConnect()}>
-  Connect Solana Manually
-</button>
+            Connect Solana Manually
+          </button>
           {/* Ethereum Wallet */}
           <div>
             {!ethConnected ? (
@@ -268,7 +268,7 @@ export default function App() {
               >
                 Bridge Your Assets
               </h2>
-              
+
               {/* Balance Display */}
               <div style={{ marginBottom: "2rem" }}>
                 <EthereumWsolBalance />
@@ -326,7 +326,7 @@ export default function App() {
               >
                 Wallet Overview
               </h2>
-              
+
               {/* Wallet Connection Status */}
               <div style={{ marginBottom: "2rem", padding: "1.5rem", background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px" }}>
                 <h3 style={{ color: "#14F195", marginBottom: "1rem", fontSize: "1.1em" }}>Connection Status</h3>
