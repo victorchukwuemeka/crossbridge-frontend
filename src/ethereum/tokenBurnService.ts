@@ -21,7 +21,7 @@ export const loadContract = async (
     if (!signer.provider) {
        throw new Error('Signer has no provider attached');
     } 
-    let code = await signer.provider.getCode(contractAddress);
+    const code = await signer.provider.getCode(contractAddress);
     if (code === '0x') {
       throw new Error('No contract found at this address');
     }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Contract, ethers, BrowserProvider } from 'ethers';
 import {
   loadContract,
   validateBurn,
@@ -8,7 +9,6 @@ import {
   monitorTransaction
 } from '../ethereum/tokenBurnService';
 import { ABI } from '../ethereum/ABI';
-import { ethers, BrowserProvider } from 'ethers';
 import { EthereumWsolBalance } from "./EthereumWsolBalance";
 
 const BurnTokenComponent = () => {
@@ -18,21 +18,25 @@ const BurnTokenComponent = () => {
   const [error, setError] = useState('');
   const [walletConnected, setWalletConnected] = useState(false);
   const [userAddress, setUserAddress] = useState('');
-  const [gasfee, setGasFee] = useState('');
+  const [gasFee, setGasFee] = useState('');
   const [solanaAddress, setSolanaAddress] = useState('');
+  const [tokenBalance, setTokenBalance] = useState('0');
+  const [contract, setContract] = useState<Contract | null>(null);
   
+  // TODO: Use the SAME contract address as EthereumWsolBalance component
+  // Currently using: 0x990f31d4359Ee8745D479c873549F5eF44494435
+  // But EthereumWsolBalance is using a different address where you have 6 wSOL
+  // Check EthereumWsolBalance.tsx for the correct CONTRACT_ADDRESS
   const CONTRACT_ADDRESS = '0x81CAD7CC4D6e972b598674201d8d33efD8973445';
-  //const RPC_URL = 'https://rpc.sepolia.org';
 
   const handleConnectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
         setIsLoading(true);
-        // Request account access
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setUserAddress(accounts[0]); // Set the user's address
-        setWalletConnected(true); // Set wallet as connected
-        setError(''); // Clear any previous errors
+        setUserAddress(accounts[0]);
+        setWalletConnected(true);
+        setError('');
       } catch (err) {
         console.error(err);
         setError('Failed to connect wallet');
@@ -43,63 +47,106 @@ const BurnTokenComponent = () => {
       setError('Please install MetaMask or another wallet provider');
     }
   };
-  
+
+  // Load contract and check balance whenever wallet connects or address changes
+  useEffect(() => {
+    const loadContractAndBalance = async () => {
+      if (!walletConnected || !userAddress) return;
+
+      try {
+        const wallet_provider = new BrowserProvider(window.ethereum);
+        const signer = await wallet_provider.getSigner();
+        
+        const contractInstance = await loadContract(CONTRACT_ADDRESS, ABI, signer);
+        await verifyContract(contractInstance);
+        setContract(contractInstance);
+
+        // Get balance with proper decimals
+        const userBalance = await contractInstance.balanceOf(userAddress);
+        const decimals = await contractInstance.decimals();
+        const formattedBalance = ethers.formatUnits(userBalance, decimals);
+        
+        console.log('Contract Address:', CONTRACT_ADDRESS);
+        console.log('User Address:', userAddress);
+        console.log('Raw balance:', userBalance.toString());
+        console.log('Decimals:', decimals);
+        console.log('Formatted balance:', formattedBalance);
+        
+        setTokenBalance(formattedBalance);
+        
+      } catch (error) {
+        console.error('Error loading contract/balance:', error);
+        setError('Failed to load contract or balance');
+      }
+    };
+
+    loadContractAndBalance();
+  }, [walletConnected, userAddress]);
+
   const checkEthBalance = async () => {
     try {
       const wallet_provider = new BrowserProvider(window.ethereum);
-      const ethBalance = await wallet_provider.getBalance(userAddress);
-      console.log('ETH Balance (wei):', ethBalance.toString());
-      console.log('ETH Balance (ETH):', ethers.formatEther(ethBalance));
-      return ethBalance;
+      return await wallet_provider.getBalance(userAddress);
     } catch (error) {
       console.error('Error checking ETH balance:', error);
       throw error;
     }
   }
 
-  
   const handleBurn = async () => {
-    if (!amount || !userAddress) return;
-    
+    if (!amount || !userAddress || !contract) return;
+
     setIsLoading(true);
     setError('');
-    setTxHash(''); // Clear previous transaction hash
-    
+    setTxHash('');
+
     try {
-      // Initialize provider and signer using the connected wallet
       const wallet_provider = new BrowserProvider(window.ethereum);
-      console.log('Provider:', wallet_provider);
-      
-      const signer = await wallet_provider.getSigner(userAddress);
-      console.log('Signer:', signer);
-      
-       // Check ETH balance first
+      const signer = await wallet_provider.getSigner();
       const ethBalance = await checkEthBalance();
-      console.log('the eth balance:',ethers.formatEther(ethBalance));
-      // Load contract
-      const contract = await loadContract(CONTRACT_ADDRESS, ABI, signer);
+
+      // Get fresh balance and decimals
+      const userBalance = await contract.balanceOf(userAddress);
+      const decimals = await contract.decimals();
+      const formattedBalance = ethers.formatUnits(userBalance, decimals);
       
-      // Validate burn
-      const burnAmountWei = await validateBurn(
+      console.log('=== BURN TRANSACTION DEBUG ===');
+      console.log('User Address:', userAddress);
+      console.log('Contract Address:', CONTRACT_ADDRESS);
+      console.log('Raw balance from contract:', userBalance.toString());
+      console.log('Decimals:', decimals);
+      console.log('Formatted balance:', formattedBalance);
+      console.log('Amount to burn:', amount);
+      
+      // Check if user has sufficient balance
+      if (parseFloat(formattedBalance) < parseFloat(amount)) {
+        throw new Error(`Insufficient tokens. Have: ${formattedBalance} wSOL, Need: ${amount} wSOL`);
+      }
+      
+      // Convert amount to wei using contract decimals
+      const burnAmountWei = ethers.parseUnits(amount, decimals);
+      console.log('Burn amount in wei:', burnAmountWei.toString());
+      
+      if (!solanaAddress || solanaAddress.length < 32) {
+        throw new Error('Please enter a valid Solana address');
+      }
+
+      // Estimate gas and format for display
+      const { gasLimit, gasPrice, totalGasCost } = await estimateGasCost(
         contract,
-        userAddress,
+        burnAmountWei,
         solanaAddress,
-        amount,
-        wallet_provider,
-        ethBalance
+        wallet_provider
       );
       
-      // Estimate gas
-      const { gasLimit, gasPrice } = await estimateGasCost(contract, burnAmountWei,solanaAddress, wallet_provider);
+      console.log('Gas limit:', gasLimit);
+      console.log('Gas Price:', gasPrice);
+      console.log('Total gas cost in wei:', totalGasCost.toString());
+      console.log('Total gas cost in ETH:', ethers.formatEther(totalGasCost));
       
-      console.log('gas limit:', gasLimit);
-      console.log('gas Price:', gasPrice);
-      const totalPrice = gasLimit * gasPrice;
-      console.log('total gas cost in (wie)', totalPrice.toString());
-      console.log('total gas cost in (eth)', ethers.formatEther(totalPrice));
-      //setGasFee('gasPrice');
-      setGasFee(gasPrice.toString());
-      // Prepare transaction
+      const formattedGasFee = ethers.formatEther(totalGasCost);
+      setGasFee(`${formattedGasFee.substring(0, 6)} ETH`);
+
       const transaction = await prepareBurnTransaction(
         contract,
         burnAmountWei,
@@ -109,25 +156,46 @@ const BurnTokenComponent = () => {
         wallet_provider,
         userAddress
       );
-      
 
-      // Execute burn
       const hash = await executeBurn(transaction, signer);
       setTxHash(hash);
-      
-      // Monitor transaction
-      await monitorTransaction(hash, wallet_provider);
-      
-      alert('Burn successful!');
-      setAmount(''); // Clear amount after successful burn
-      
-    } catch (err) {
+
+      const receipt = await monitorTransaction(hash, wallet_provider);
+      if (receipt && receipt.success) {
+        console.log('Burn successful! Block:', receipt.blockNumber);
+        // Refresh balance after successful burn
+        const newBalance = await contract.balanceOf(userAddress);
+        const newFormattedBalance = ethers.formatUnits(newBalance, decimals);
+        setTokenBalance(newFormattedBalance);
+      }
+
+      setAmount('');
+    } catch (err: any) {
       console.error('Burn error:', err);
-      setError((err as Error).message || 'Burn transaction failed');
+      setError(err.message || 'Burn transaction failed');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const verifyContract = async (contract: Contract) => {
+    try {
+      const fragment = contract.interface.getFunction('burn');
+      if (!fragment) {
+        throw new Error('Contract does not have a burn function');
+      }
+
+      try {
+        const name = await contract.name();
+        const symbol = await contract.symbol();
+        console.log(`Contract: ${name} (${symbol})`);
+      } catch (error) {
+        console.log('Contract does not implement name/symbol');
+      }
+    } catch (error) {
+      throw new Error('Contract does not have a burn function');
+    }
+  }
 
   const handleDisconnectWallet = () => {
     setWalletConnected(false);
@@ -136,165 +204,178 @@ const BurnTokenComponent = () => {
     setTxHash('');
     setError('');
     setSolanaAddress('');
+    setGasFee('');
+    setTokenBalance('0');
+    setContract(null);
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
-      <h2>Burn WSOL Tokens</h2>
-      <p>Your Wsol balance</p> <EthereumWsolBalance/>
-      
-      {/* Wallet Connection Section */}
+    <div className="burn-container">
+      {/* Instructions Section */}
+      <div className="instructions-section">
+        <h2>Burn WSOL to SOL</h2>
+        <div className="instructions-card">
+          <h3>How it works</h3>
+          <ol className="steps">
+            <li>Connect your Ethereum wallet</li>
+            <li>Enter the amount of WSOL tokens to burn</li>
+            <li>Confirm the transaction in your wallet</li>
+            <li>Receive equivalent SOL on Solana network</li>
+          </ol>
+        </div>
+      </div>
+
+      {/* Wallet Connection */}
       {!walletConnected ? (
-        <div style={{ marginBottom: '20px' }}>
-          <button 
-            onClick={handleConnectWallet} 
-            disabled={isLoading}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: isLoading ? 'not-allowed' : 'pointer'
-            }}
-          >
-            {isLoading ? 'Connecting...' : 'Connect Wallet'}
-          </button>
+        <div className="wallet-connection">
+          <div className="wallet-button-container">
+            <button
+              onClick={handleConnectWallet}
+              disabled={isLoading}
+              className="wallet-button"
+            >
+              {isLoading ? (
+                <>
+                  <span className="loading-spinner"></span>
+                  <span className="button-text">Connecting...</span>
+                </>
+              ) : (
+                <span className="button-text">Connect Wallet</span>
+              )}
+            </button>
+          </div>
         </div>
       ) : (
-        <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
-          <p style={{ margin: '0', color: '#333' }}>
-            <strong>Connected:</strong> {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
-          </p>
-          <button 
+        <div className="connected-wallet">
+          <div className="wallet-info">
+            <div className="wallet-details">
+              <span className="wallet-status">Connected</span>
+              <span className="wallet-address">{userAddress.slice(0, 6)}...{userAddress.slice(-4)}</span>
+            </div>
+          </div>
+          <button
             onClick={handleDisconnectWallet}
-            style={{
-              marginTop: '5px',
-              padding: '5px 10px',
-              backgroundColor: '#f44336',
-              color: 'white',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
+            className="disconnect-button"
           >
             Disconnect
           </button>
         </div>
       )}
-      <div>
-       <p>gasFee</p> {gasfee}
-      </div>
-       
+
+      {/* Debug Info */}
+      {walletConnected && (
+        <div className="debug-info" style={{ 
+          backgroundColor: '#f0f0f0', 
+          padding: '10px', 
+          margin: '10px 0', 
+          borderRadius: '5px',
+          fontSize: '12px'
+        }}>
+          <strong>Debug Info:</strong><br />
+          Contract: {CONTRACT_ADDRESS}<br />
+          User: {userAddress}<br />
+          Balance: {tokenBalance} wSOL
+        </div>
+      )}
+
       {/* Burn Section */}
-      <div style={{ marginBottom: '20px' }}>
+      {walletConnected && (
+        <div className="burn-form">
+          {/* Solana Address Input */}
+          <div className="solana-address-input">
+            <label>Solana Address</label>
+            <input
+              type="text"
+              value={solanaAddress}
+              onChange={(e) => setSolanaAddress(e.target.value)}
+              placeholder="Solana address (e.g., 5Fwc...xyz123)"
+              disabled={!walletConnected || isLoading}
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginBottom: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '5px',
+                fontSize: '16px'
+              }}
+            />
+          </div>
 
-        <input
-          type="text"
-          value={solanaAddress}
-          onChange={(e) => setSolanaAddress(e.target.value)}
-          placeholder="Solana address (e.g., 5Fwc...xyz123)"
-          disabled={!walletConnected || isLoading}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '10px',
-            border: '1px solid #ddd',
-            borderRadius: '5px',
-            fontSize: '16px'
-          }}
-        />
+          {/* Amount Input */}
+          <div className="amount-input">
+            <label>Amount to Burn</label>
+            <div className="input-group">
+              <input
+                type="number"
+                placeholder="0.0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                disabled={isLoading}
+                min="0"
+                step="any"
+              />
+              <span>WSOL</span>
+            </div>
+          </div>
+          
+          <span className="conversion-rate">1 WSOL = 1 SOL </span>
+          
+          <div className="token-info">
+            <div className="balance-info">
+              <span>Your Balance:</span>
+              <span>{tokenBalance} wSOL</span>
+            </div>
+            <div className="balance-info">
+              <span>EthereumWsolBalance Component:</span>
+              <span><EthereumWsolBalance /></span>
+            </div>
+            <div className="gas-info">
+              <span>Estimated Gas:</span>
+              <span>{gasFee || 'Calculating...'}</span>
+            </div>
+          </div>
 
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Amount to burn"
-          disabled={!walletConnected || isLoading}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '10px',
-            border: '1px solid #ddd',
-            borderRadius: '5px',
-            fontSize: '16px'
-          }}
-        />
-        
-        <button 
-          onClick={handleBurn} 
-          disabled={isLoading || !amount || !walletConnected || !solanaAddress}
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: walletConnected && amount && !solanaAddress && !isLoading? '#2196F3' : '#ccc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: walletConnected && amount && !isLoading && !solanaAddress? 'pointer' : 'not-allowed',
-            fontSize: '16px',
-            fontWeight: 'bold'
-          }}
-        >
-          {isLoading ? 'Burning...' : 'Burn Tokens'}
-        </button>
-      </div>
-
-      {/* Error Display */}
-      {error && (
-        <div style={{ 
-          padding: '10px', 
-          backgroundColor: '#ffebee', 
-          color: '#c62828', 
-          borderRadius: '5px',
-          marginBottom: '10px',
-          border: '1px solid #ffcdd2'
-        }}>
-          <strong>Error:</strong> {error}
-        </div>
-      )}
-
-      {/* Transaction Hash Display */}
-      {txHash && (
-        <div style={{ 
-          padding: '10px', 
-          backgroundColor: '#e8f5e8', 
-          color: '#2e7d32', 
-          borderRadius: '5px',
-          marginBottom: '10px',
-          border: '1px solid #c8e6c9'
-        }}>
-          <strong>Transaction Hash:</strong> 
-          <br />
-          <a 
-            href={`https://sepolia.etherscan.io/tx/${txHash}`} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ color: '#1976d2', wordBreak: 'break-all' }}
+          <button
+            className="action-button"
+            onClick={handleBurn}
+            disabled={isLoading || !amount || !solanaAddress || parseFloat(amount) <= 0}
           >
-            {txHash}
-          </a>
-        </div>
-      )}
+            {isLoading ? (
+              <>
+                <span className="loading-spinner"></span>
+                <span className="button-text">Processing...</span>
+              </>
+            ) : <span className="button-text">Burn WSOL Tokens</span>}
+          </button>
 
-      {/* Instructions */}
-      {!walletConnected && (
-        <div style={{ 
-          padding: '10px', 
-          backgroundColor: '#fff3e0', 
-          color: '#ef6c00', 
-          borderRadius: '5px',
-          fontSize: '14px',
-          border: '1px solid #ffcc02'
-        }}>
-          <strong>Instructions:</strong>
-          <br />
-          1. Connect your MetaMask wallet
-          <br />
-          2. Enter the amount of WSOL tokens to burn
-          <br />
-          3. Click "Burn Tokens" and confirm the transaction
+          {/* Status Messages */}
+          {error && (
+            <div className="error-message">
+              <div className="error-icon">⚠️</div>
+              <div>
+                <strong>Transaction Error</strong>
+                <p>{error}</p>
+              </div>
+            </div>
+          )}
+
+          {txHash && (
+            <div className="transaction-success">
+              <div className="success-icon">✅</div>
+              <div>
+                <strong>Transaction Submitted!</strong>
+                <p>Your WSOL tokens are being burned</p>
+                <a
+                  href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="etherscan-link"
+                >
+                  View on Etherscan
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

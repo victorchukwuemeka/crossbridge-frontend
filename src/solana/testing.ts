@@ -3,7 +3,7 @@ import {
   SystemProgram,
   Transaction,
   TransactionInstruction,
-  Connection,
+  //Connection,
 } from "@solana/web3.js";
 import type { SendOptions } from "@solana/web3.js";
 import BN from "bn.js";
