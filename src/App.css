@@ -1,11 +1,7 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* src/App.css - Cleaned and Optimized */
-
-/* ===== CSS VARIABLES ===== */
 :root {
   --primary: #c6ee12;
   --secondary: #0A0E17;
@@ -273,6 +269,10 @@ body {
   margin-top: 0.8rem;
 }
 
+.button-text{ 
+  color: var(--text) ;
+}
+
 .wallet-button {
   display: flex;
   align-items: center;
@@ -445,6 +445,23 @@ body {
   padding-right: 30px;
   /* Space for MAX button */
 }
+
+/* Info Footer */
+
+.footerone {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+
 
 .input-group input::placeholder {
   color: #666;
@@ -734,4 +751,3 @@ body {
     align-items: flex-start;
   }
 }
->>>>>>> 34a919b0f6011fbcb917f4fd811220b5836a3d53

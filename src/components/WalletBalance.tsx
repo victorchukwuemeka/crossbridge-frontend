@@ -2,8 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { walletSolBalance } from '../solana/walletSolBalance';
 
+interface WalletBalanceProps {
+  onBalanceUpdate?: (balance: string | null) => void;
+}
 
-export function WalletBalance() {
+export function WalletBalance({ onBalanceUpdate }: WalletBalanceProps) {
   const wallet = useWallet();
   const [balance, setBalance] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -13,6 +16,10 @@ export function WalletBalance() {
     if (!wallet.connected || !wallet.publicKey) {
       setBalance(null);
       setError(null);
+
+      if (onBalanceUpdate) {
+        onBalanceUpdate(null); // <--- Add this line
+      }
       return;
     }
 
@@ -21,17 +28,34 @@ export function WalletBalance() {
       setError(null);
       const bal = await walletSolBalance(wallet);
       setBalance(bal);
+      if (onBalanceUpdate) {
+        onBalanceUpdate(bal);
+      }
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch balance";
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [wallet]);
+  }, [wallet, onBalanceUpdate]);
 
-  useEffect(() => {
-    fetchBalance();
-  }, [fetchBalance]);
+ useEffect(() => {
+  // Always clear balance first when wallet changes
+  if (!wallet.connected || !wallet.publicKey) {
+    setBalance(null);
+    setError(null);
+    if (onBalanceUpdate) {
+      onBalanceUpdate(null);
+    }
+    return; // prevent running fetchBalance when not connected
+  }
+
+  // If connected, fetch balance
+  fetchBalance();
+}, [wallet.connected, wallet.publicKey]); // ← only depend on wallet state
+
+
 
   return (
     <div style={{
@@ -141,64 +165,10 @@ export function WalletBalance() {
         <button
           onClick={fetchBalance}
           disabled={loading || !wallet.connected}
-          style={{
-            width: '100%',
-            padding: '14px',
-            background: loading || !wallet.connected ? 
-              'rgba(255, 255, 255, 0.05)' : 
-              'linear-gradient(45deg, #9945FF, #14F195)',
-            color: loading || !wallet.connected ? '#666' : 'white',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '15px',
-            fontWeight: '500',
-            cursor: loading || !wallet.connected ? 'not-allowed' : 'pointer',
-            transition: 'transform 0.2s'
-          }}
+          className="action-button"
         >
-          {loading ? 'Refreshing...' : '🔄 Refresh Balance'}
+          {loading ? 'Refreshing...' : <span className="button-text">Refresh Balance</span>}
         </button>
-      </div>
-
-      {/* Info Footer */}
-      <div style={{
-        marginTop: '1rem',
-        padding: '1rem',
-        background: 'rgba(30, 30, 30, 0.8)',
-        borderRadius: '12px',
-        fontSize: '13px',
-        color: '#ccc',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        border: '1px solid rgba(255, 255, 255, 0.05)'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
-        }}>
-          <span style={{
-            width: '6px',
-            height: '6px',
-            background: '#14F195',
-            borderRadius: '50%'
-          }}></span>
-          <span>Real-time balance updates</span>
-        </div>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
-        }}>
-          <span style={{
-            width: '6px',
-            height: '6px',
-            background: '#14F195',
-            borderRadius: '50%'
-          }}></span>
-          <span>Connected to Solana Devnet</span>
-        </div>
       </div>
     </div>
   );
