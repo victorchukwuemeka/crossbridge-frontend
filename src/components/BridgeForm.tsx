@@ -274,7 +274,7 @@ export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
       return;
     }
 
-    const requiredBalance = solAmount + NETWORK_FEE;
+    const requiredBalance = solAmount - TOTAL_FEE;
     if (balance && requiredBalance > parseFloat(balance)) {
       setError(`Insufficient balance. You need ${requiredBalance.toFixed(6)} SOL (incl. network fee)`);
       return;
@@ -334,7 +334,6 @@ export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
             value={amount}
             onChange={(e) => handleAmountChange(e.target.value)}
              disabled={!wallet.connected || loading || balance === null}
-            //disabled={!wallet.connected || loading}
           />
           <button
             onClick={setMaxAmount}

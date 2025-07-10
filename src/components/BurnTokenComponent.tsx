@@ -282,23 +282,17 @@ const BurnTokenComponent = () => {
       {walletConnected && (
         <div className="burn-form">
           {/* Solana Address Input */}
-          <div className="solana-address-input">
-            <label>Solana Address</label>
+           <div className="amount-input">
+               <label>Solana Address</label>
+          <div className="input-group">
             <input
               type="text"
               value={solanaAddress}
               onChange={(e) => setSolanaAddress(e.target.value)}
               placeholder="Solana address (e.g., 5Fwc...xyz123)"
               disabled={!walletConnected || isLoading}
-              style={{
-                width: '100%',
-                padding: '10px',
-                marginBottom: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '5px',
-                fontSize: '16px'
-              }}
             />
+          </div>
           </div>
 
           {/* Amount Input */}
@@ -311,8 +305,8 @@ const BurnTokenComponent = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 disabled={isLoading}
-                min="0"
-                step="any"
+                //min="0"
+                //step="any"
               />
               <span>WSOL</span>
             </div>
