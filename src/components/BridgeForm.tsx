@@ -213,8 +213,9 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { lockSol, initializeBridge } from '../solana/lockSol';
 import { WalletBalance } from './WalletBalance';
 
-interface BridgeFormProps {
+export interface BridgeFormProps {
   onTransactionComplete: () => void;
+  balance?: number | null; // <-- Add this line
 }
 
 const BRIDGE_FEE = 0.001;
