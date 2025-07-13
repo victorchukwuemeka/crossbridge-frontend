@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": ""
+        }
+      ],
+      "destination": "https://crossbridgefi.com/$1",
+      "permanent": true
+    }
+  ]
+}

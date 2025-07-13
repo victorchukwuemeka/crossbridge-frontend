@@ -144,7 +144,7 @@ export default function App() {
     <div className="app-container">
       <header className="app-header">
         <img 
-          src="/crossbridge-logo.jpg" 
+          src="/crossbridge-logo.png" 
           alt="CrossBridge Logo"
           className="app-logo"
         />
