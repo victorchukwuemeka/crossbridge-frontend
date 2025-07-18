@@ -659,10 +659,12 @@ title-container {
 .transaction-success {
   display: flex;
   gap: 12px;
-  padding: 16px;
+  padding: 20px 24px;
   border-radius: 12px;
   margin-top: 20px;
   align-items: flex-start;
+  line-height: 1.5;
+  min-height: 60px;
 }
 
 .error-message {
@@ -678,30 +680,110 @@ title-container {
 .error-message div,
 .transaction-success div {
   flex: 1;
+  padding: 0;
 }
 
 .error-message strong,
 .transaction-success strong {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .error-message p,
 .transaction-success p {
-  font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.error-message p:last-child,
+.transaction-success p:last-child {
+  margin-bottom: 0;
 }
 
 .etherscan-link {
   color: var(--accent);
   font-size: 0.9rem;
   text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .etherscan-link:hover {
   text-decoration: underline;
+  color: var(--primary);
 }
 
+/* Icon styling for error messages */
+.error-message::before,
+.transaction-success::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.error-message::before {
+  background: var(--error);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.transaction-success::before {
+  background: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Validation error messages (inline errors) */
+.validation-error,
+.input-error {
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid rgba(255, 82, 82, 0.3);
+  color: var(--error);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.validation-error::before,
+.input-error::before {
+  content: "⚠";
+  font-size: 1.1rem;
+  color: var(--error);
+}
+@media (max-width: 600px) {
+  .error-message,
+  .transaction-success {
+    padding: 16px;
+    gap: 10px;
+  }
+  
+  .error-message p,
+  .transaction-success p {
+    font-size: 0.9rem;
+  }
+  
+  .error-message::before,
+  .transaction-success::before {
+    width: 18px;
+    height: 18px;
+  }
+}
 /* ===== TRANSACTION FEES ===== */
 .fee-row {
   display: flex;

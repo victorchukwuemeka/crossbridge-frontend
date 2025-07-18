@@ -1,0 +1,522 @@
+/* CSS Variables - these work globally */
+:root {
+    --primary: #c6ee12;
+    --secondary: #0A0E17;
+    --accent: #00D1FF;
+    --background: #0A0E17;
+    --card-bg: #0F1722;
+    --text: #FFFFFF;
+    --text-secondary: #94A3B8;
+    --border: #1E293B;
+    --success: #00FF9D;
+    --error: #FF5252;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Global body styling */
+:global(body) {
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Global reset */
+:global(*) {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.docsContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.appHeader {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    background: var(--secondary);
+}
+
+.headerWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.topLinks {
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px;
+    margin-bottom: 15px;
+}
+
+.topLinks a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topLinks a:hover {
+    color: var(--accent);
+}
+
+.brandingCentered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.appLogo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: float 3s ease-in-out infinite;
+  object-fit: cover;
+  background-color: transparent;
+}
+
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
+.logoInner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.logoInner :global(.logo-icon) {
+    font-size: 24px;
+    color: var(--secondary);
+}
+
+.appTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.appSubtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 500px;
+}
+
+/* Hero Section */
+.heroSection {
+    padding: 80px 20px;
+    text-align: center;
+    background: radial-gradient(circle at top right, rgba(0, 209, 255, 0.1), transparent 50%),
+        radial-gradient(circle at bottom left, rgba(198, 238, 18, 0.1), transparent 50%);
+    position: relative;
+    overflow: hidden;
+}
+
+.heroSection::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(0, 209, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(198, 238, 18, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.heroSection h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+.heroSection p {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.getStartedBtn {
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    color: var(--secondary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 15px 40px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.getStartedBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(198, 238, 18, 0.4);
+}
+
+/* Main Content */
+.docsMain {
+    padding: 80px 0;
+}
+
+.docsMain h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--primary);
+}
+
+.docsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.docCard {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 30px;
+    border: 1px solid var(--border);
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: block;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    color: inherit;
+}
+
+.docCard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.docCard:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent);
+}
+
+.docCard:hover::before {
+    transform: scaleX(1);
+}
+
+.docCard h3 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.docCard h3 svg {
+    color: var(--accent);
+}
+
+.docCard p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Advanced Section */
+.advancedSection {
+    margin-top: 80px;
+}
+
+.advancedSection h2 {
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+    color: var(--primary);
+    text-align: center;
+}
+
+.advancedGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 30px;
+}
+
+.advancedCard {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.advancedCard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+}
+
+.advancedCard h3 {
+    color: var(--accent);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.advancedCard h3 svg {
+    color: var(--primary);
+}
+
+.advancedCard p {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.outlineBtn {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 12px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.outlineBtn:hover {
+    background: rgba(0, 209, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+/* Support Section */
+.supportSection {
+    background: var(--card-bg);
+    padding: 80px 20px;
+    text-align: center;
+    margin-top: 60px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.supportSection::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 209, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.supportSection::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(198, 238, 18, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.supportContent {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.supportSection h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.supportSection p {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contactBtn {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 15px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contactBtn:hover {
+    background: rgba(198, 238, 18, 0.1);
+    transform: translateY(-3px);
+}
+
+/* Footer */
+.appFooter {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 80px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    border-top: 1px solid var(--border);
+}
+
+.appFooter p {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Animation */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .heroSection h1 {
+        font-size: 2.8rem;
+    }
+    .advancedGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .appTitle {
+        font-size: 2rem;
+    }
+    .heroSection h1 {
+        font-size: 2.2rem;
+    }
+    .heroSection p {
+        font-size: 1.2rem;
+    }
+    .docsGrid {
+        grid-template-columns: 1fr;
+    }
+    .advancedCard {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topLinks {
+        justify-content: center;
+    }
+    .appTitle {
+        font-size: 1.8rem;
+    }
+    .heroSection h1 {
+        font-size: 1.8rem;
+    }
+    .heroSection p {
+        font-size: 1.1rem;
+    }
+    .getStartedBtn,
+    .contactBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}
