@@ -34,94 +34,60 @@ body {
     radial-gradient(circle at 90% 80%, rgba(0, 209, 255, 0.05) 0%, transparent 20%);
 }
 
-/* ===== LAYOUT COMPONENTS ===== */
-title-container {
+/* ===== HEADER STYLES ===== */
+.app-header {
+  padding: 20px;
+  background-color: #0d1117;
+  border-bottom: 1px solid #1c1c1c;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .header-bar {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; 
+  align-items: center; /* Changed to center alignment */
   flex-wrap: wrap;
   gap: 20px;
   width: 100%;
   margin-bottom: 20px;
+  position: relative; /* Added for positioning context */
 }
 
-
- .branding {
+.branding {
   display: flex;
   align-items: center;
   gap: 16px;
   text-align: left;
   flex: 1;
-  position: relative;
-  padding-right: 120px; 
-} 
+}
 
-  .branding-centered {
+/* .header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+} */
+
+
+
+.branding-centered {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-} 
-
-.top-links {
-  position: absolute;
-  top: 20px;
-  right: 40px;
-  display: flex;
-  gap: 12px;
-}
-
-.top-links a {
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
-  padding: 8px 16px;
-  border: 1px solid var(--primary);
-  border-radius: 8px;
-  background: transparent;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.top-links a:hover,
-.top-links a:focus,
-.top-links a:active {
-  background: rgba(198, 238, 18, 0.1); /* light green tint */
-  border-color: var(--primary);
-  color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(198, 238, 18, 0.3);
-}
-
-
-
-.app-container {
-  max-width: 500px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.app-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .app-logo {
   width: 75px;
   height: auto;
   max-width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .app-title {
@@ -139,6 +105,46 @@ title-container {
   color: var(--text-secondary);
   font-size: 1.1rem;
   font-weight: 500;
+}
+
+
+.top-links {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  gap: 12px;
+
+}
+
+.top-links a {
+  color: var(--primary);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.3s;
+  padding: 8px 16px;
+  /* border: 2px solid var(--primary); */
+  border-radius: 8px;
+  background: transparent;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  
+}
+
+.top-links a:hover {
+  color: #aeff00;
+  background: rgba(146, 175, 17, 0.1);
+  border-color: var(--primary); 
+  box-shadow: 0 0 0 2px rgba(198, 238, 18, 0.3);
+}
+
+/* ===== MAIN CONTAINER ===== */
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .app-footer {
@@ -511,25 +517,7 @@ title-container {
   font-size: 1.1rem;
   font-weight: 400;
   padding-right: 30px;
-  /* Space for MAX button */
 }
-
-/* Info Footer */
-
-.footerone {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: rgba(30, 30, 30, 0.8);
-  border-radius: 12px;
-  font-size: 13px;
-  color: #ccc;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-
 
 .input-group input::placeholder {
   color: #666;
@@ -555,11 +543,8 @@ title-container {
   overflow: hidden;
   transition: all 0.3s ease;
   flex-shrink: 0;
-  /* Prevent the span from shrinking */
   white-space: nowrap;
-  /* Prevent text wrapping */
 }
-
 
 .max-button {
   position: absolute;
@@ -642,6 +627,7 @@ title-container {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin-top: 15px;
 }
 
 .action-button:hover:not(:disabled) {
@@ -654,6 +640,27 @@ title-container {
   cursor: not-allowed;
 }
 
+/* === BRIDGE BUTTON === */
+.bridge-button {
+  background: linear-gradient(to right, #a8ff78, #78ffd6);
+  color: #000;
+  padding: 14px 28px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 255, 170, 0.3);
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.bridge-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 255, 170, 0.5);
+}
+
 /* ===== MESSAGES & FEEDBACK ===== */
 .error-message,
 .transaction-success {
@@ -661,10 +668,13 @@ title-container {
   gap: 12px;
   padding: 20px 24px;
   border-radius: 12px;
-  margin-top: 20px;
+   margin: 15px 0; 
   align-items: flex-start;
   line-height: 1.5;
   min-height: 60px;
+}
+.error-message + .action-button {
+  margin-top: 10px; /* Reduced space between error and button */
 }
 
 .error-message {
@@ -717,7 +727,6 @@ title-container {
   color: var(--primary);
 }
 
-/* Icon styling for error messages */
 .error-message::before,
 .transaction-success::before {
   content: '';
@@ -725,26 +734,23 @@ title-container {
   height: 20px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 4px;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .error-message::before {
   background: var(--error);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
-  background-size: 12px;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .transaction-success::before {
   background: var(--success);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
-  background-size: 12px;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
-/* Validation error messages (inline errors) */
+/* Validation error messages */
 .validation-error,
 .input-error {
   background: rgba(255, 82, 82, 0.15);
@@ -766,24 +772,7 @@ title-container {
   font-size: 1.1rem;
   color: var(--error);
 }
-@media (max-width: 600px) {
-  .error-message,
-  .transaction-success {
-    padding: 16px;
-    gap: 10px;
-  }
-  
-  .error-message p,
-  .transaction-success p {
-    font-size: 0.9rem;
-  }
-  
-  .error-message::before,
-  .transaction-success::before {
-    width: 18px;
-    height: 18px;
-  }
-}
+
 /* ===== TRANSACTION FEES ===== */
 .fee-row {
   display: flex;
@@ -824,6 +813,20 @@ title-container {
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
+}
+
+/* Info Footer */
+.footerone {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* ===== ANIMATIONS ===== */
@@ -870,6 +873,12 @@ title-container {
     margin-top: 10px;
   }
 
+  .header-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
   .branding {
     flex-direction: column;
     align-items: center;
@@ -895,7 +904,7 @@ title-container {
     padding: 6px 12px;
     border-radius: 8px;
     color: var(--primary);
-    border: 1px solid var(--primary);
+    /* border: 1px solid var(--primary); */
     background-color: transparent;
     transition: all 0.3s ease;
   }
@@ -910,6 +919,7 @@ title-container {
 
   .app-logo {
     margin-bottom: 6px;
+    height: 50px;
   }
 
   .app-title {
@@ -955,5 +965,23 @@ title-container {
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
+  }
+
+  .error-message,
+  .transaction-success {
+    padding: 14px 16px;
+    font-size: 0.88rem;
+  }
+
+  .error-message::before,
+  .transaction-success::before {
+    width: 18px;
+    height: 18px;
+  }
+
+  .error-message p,
+  .transaction-success p {
+    font-size: 0.87rem;
+    line-height: 1.4;
   }
 }
