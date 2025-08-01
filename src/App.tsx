@@ -102,6 +102,7 @@ import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethe
 //import { EthereumWsolBalance } from "./components/EthereumWsolBalance";
 import BurnTokenComponent from "./components/BurnTokenComponent";
 import BridgeForm from "./components/BridgeForm";
+import CCTPBridge from './components/CCTPBridge';
 
 
 export default function App() {
@@ -168,6 +169,8 @@ export default function App() {
           balance={null}
         />
       </section>
+
+      
 
 
       {/* ethereum burn section */}
