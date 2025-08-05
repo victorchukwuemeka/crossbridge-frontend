@@ -1,4 +1,5 @@
-//import { Buffer } from 'buffer'
+import { Buffer } from 'buffer'
+import './pollyfills'; 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

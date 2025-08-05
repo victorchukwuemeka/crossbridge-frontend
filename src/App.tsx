@@ -105,17 +105,64 @@
 //   );
 // }
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/homepage';                 // Your main bridge/burn UI
-import DocsPage from './pages/documentation';            // This points to documentation/index.tsx
+
+import { useState, useEffect } from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+//import { BridgeForm } from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
+import { getCompleteTransactionInfo, type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
+//import './App.css'; // Import the CSS file
+//import { EthereumWsolBalance } from "./components/EthereumWsolBalance";
+import BurnTokenComponent from "./components/BurnTokenComponent";
+import BridgeForm from "./components/BridgeForm";
+import CCTPBridge from './components/CCTPBridge';
+
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />         {/* Root route */}
-        <Route path="/docs" element={<DocsPage />} />     {/* Docs route */}
-      </Routes>
-    </Router>
+    <div className="app-container">
+      {/* Header Section */}
+      <header className="app-header">
+        <h1 className="app-title">SOL BRIDGE</h1>
+        <p className="app-subtitle">Connect • Bridge • Transfer</p>
+      </header>
+
+      {/* Wallet Connection Section */}
+      <section className="wallet-section card-hover">
+        <h2>Connect Your Solana Wallet</h2>
+        <WalletMultiButton />
+      </section>
+
+      {/* Balance Section */}
+      <section className="balance-section card-hover">
+        <WalletBalance />
+      </section>
+
+      {/* Bridge Section */}
+      <section className="bridge-section">
+        <BridgeForm
+          onTransactionComplete={() => {
+            // Refresh balance after 2 seconds
+            setTimeout(() => window.location.reload(), 2000);
+          }}
+          balance={null}
+        />
+      </section>
+
+      
+
+
+      {/* ethereum burn section */}
+       
+       <BurnTokenComponent />
+
+      {/* Transaction Info Section */}
+      {transactionInfo && (
+        <section className="transaction-section card-hover">
+          <TransactionInfoCard info={transactionInfo} />
+        </section>
+      )}
+    </div>
   );
 }

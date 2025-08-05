@@ -13,6 +13,7 @@ import { getBridgePda } from "./pda";
 import { Buffer } from 'buffer';
 import { sha256 } from 'js-sha256';
 
+
 // Type for better error handling
 // interface SolanaError extends Error {
 //   logs?: string[];
@@ -202,9 +203,9 @@ export async function lockSol(
       throw new Error(`Bridge account owned by wrong program. Expected: ${PROGRAM_ID.toBase58()}, Got: ${bridgeAccountInfo.owner.toBase58()}`);
     }
 
-    // Verify bridge account has correct data size (8 discriminator + 8 total_locked + 1 bump = 17 bytes)
-    if (bridgeAccountInfo.data.length !== 17) {
-      throw new Error(`Bridge account has wrong data size. Expected 17 bytes, got ${bridgeAccountInfo.data.length}`);
+    // Verify bridge account has correct data size (8 discriminator + 1 bump + 8total_locked + 32 relayer_pubkey + 8fees_collected = 17 bytes)
+    if (bridgeAccountInfo.data.length !== 57) {
+      throw new Error(`Bridge account has wrong data size. Expected 57 bytes, got ${bridgeAccountInfo.data.length}`);
     }
 
     // 5. Check user balance
@@ -280,12 +281,16 @@ export async function lockSol(
       totalLength: data.length
     });
 
-   
+    
+    console.log("USER bALANCE pda BUMP publickey ", userPublicKey.toBase58());
+    console.log("User buffer data form :", userPublicKey.toBuffer());
     //  for the  user_balance account  in my solana program!
     const [userBalancePda] = PublicKey.findProgramAddressSync(
       [Buffer.from("user_balance"), userPublicKey.toBuffer()],
       PROGRAM_ID
     );
+    
+
 
      // 7. Create instruction with proper account ordering
     const ix = new TransactionInstruction({
@@ -631,7 +636,7 @@ export async function initializeBridge(
 
     // Check user balance for initialization
     const balance = await connection.getBalance(wallet.publicKey);
-    const rentExemptAmount = await connection.getMinimumBalanceForRentExemption(17); // Account size
+    const rentExemptAmount = await connection.getMinimumBalanceForRentExemption(57); // Account size
     const feeBuffer = 10000;
     const totalNeeded = rentExemptAmount + feeBuffer;
     
@@ -706,6 +711,7 @@ export async function initializeBridge(
       console.error("❌ Initialize confirmation error:", confirmation.value.err);
       throw new Error(`Initialize failed: ${JSON.stringify(confirmation.value.err)}`);
     }
+
 
     // Verify the account was created correctly
     const newAccountInfo = await connection.getAccountInfo(bridgePda);
