@@ -1,11 +1,7 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* src/App.css - Cleaned and Optimized */
-
-/* ===== CSS VARIABLES ===== */
 :root {
   --primary: #c6ee12;
   --secondary: #0A0E17;
@@ -20,7 +16,7 @@
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* ===== GLOBAL STYLES ===== */
+ /* ===== GLOBAL STYLES =====  */
 * {
   margin: 0;
   padding: 0;
@@ -38,26 +34,58 @@ body {
     radial-gradient(circle at 90% 80%, rgba(0, 209, 255, 0.05) 0%, transparent 20%);
 }
 
-/* ===== LAYOUT COMPONENTS ===== */
-.app-container {
-  max-width: 500px;
-  margin: 0 auto;
+ /* ===== HEADER STYLES =====  */
+.app-header {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  justify-content: center;
 }
 
-.app-header {
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Changed to center alignment */
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative; /* Added for positioning context*/
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  flex: 1;
+}
+
+/* .header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+} */
+
+
+
+.branding-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 20px 0;
-  animation: fadeIn 0.8s ease-out;
 }
 
 .app-logo {
   width: 75px;
   height: auto;
   max-width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .app-title {
@@ -77,6 +105,46 @@ body {
   font-weight: 500;
 }
 
+
+.top-links {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  gap: 12px;
+
+}
+
+.top-links a {
+  color: var(--primary);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.3s;
+  padding: 8px 16px;
+  /* border: 2px solid var(--primary); */
+  border-radius: 8px;
+  background: transparent;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  
+}
+
+.top-links a:hover {
+  color: #aeff00;
+  background: rgba(146, 175, 17, 0.1);
+  border-color: var(--primary); 
+  box-shadow: 0 0 0 2px rgba(198, 238, 18, 0.3);
+}
+
+ /* ===== MAIN CONTAINER =====  */
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .app-footer {
   text-align: center;
   padding: 20px 0;
@@ -86,7 +154,7 @@ body {
   border-top: 1px solid var(--border);
 }
 
-/* ===== TAB NAVIGATION ===== */
+/* ===== TAB NAVIGATION =====  */
 .tab-container {
   display: flex;
   background: var(--card-bg);
@@ -115,7 +183,7 @@ body {
   box-shadow: 0 2px 8px rgba(0, 255, 157, 0.1);
 }
 
-/* ===== MAIN CONTENT ===== */
+/* ===== MAIN CONTENT =====  */
 .main-content {
   background: var(--card-bg);
   border-radius: 16px;
@@ -125,7 +193,7 @@ body {
   animation: slideUp 0.5s ease-out;
 }
 
-/* ===== BRIDGE STATUS ===== */
+/* ===== BRIDGE STATUS =====  */
 .bridge-status {
   display: flex;
   flex-direction: column;
@@ -193,17 +261,17 @@ body {
   flex-shrink: 0;
 }
 
-/* ===== BURN CONTAINER ===== */
+/* ===== BURN CONTAINER =====  */
 .burn-container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   max-width: 480px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
 }
 
-/* ===== INSTRUCTIONS SECTION ===== */
+ /* ===== INSTRUCTIONS SECTION =====  */
 .instructions-section {
   margin-bottom: 24px;
 }
@@ -242,7 +310,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ===== WALLET SECTION ===== */
+/* ===== WALLET SECTION =====  */
 .wallet-section {
   background: rgba(15, 23, 34, 0.8);
   border-radius: 16px;
@@ -271,6 +339,10 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 0.8rem;
+}
+
+.button-text{ 
+  color: var(--text) ;
 }
 
 .wallet-button {
@@ -304,7 +376,7 @@ body {
   transform: none;
 }
 
-/* Wallet dropdown styling */
+----------- Wallet dropdown styling 
 .wallet-button ul,
 .wallet-button .wallet-adapter-dropdown,
 .wallet-button [role="menu"] {
@@ -331,7 +403,7 @@ body {
   background-color: #f8fafc !important;
 }
 
-/* Connected Wallet Display */
+--------Connected Wallet Display 
 .connected-wallet {
   display: flex;
   justify-content: space-between;
@@ -385,7 +457,7 @@ body {
   background: rgba(255, 82, 82, 0.2);
 }
 
-/* ===== BURN FORM ===== */
+ /* ===== BURN FORM =====  */
 .burn-form {
   background: rgba(15, 23, 34, 0.8);
   border-radius: 16px;
@@ -443,7 +515,6 @@ body {
   font-size: 1.1rem;
   font-weight: 400;
   padding-right: 30px;
-  /* Space for MAX button */
 }
 
 .input-group input::placeholder {
@@ -470,11 +541,8 @@ body {
   overflow: hidden;
   transition: all 0.3s ease;
   flex-shrink: 0;
-  /* Prevent the span from shrinking */
   white-space: nowrap;
-  /* Prevent text wrapping */
 }
-
 
 .max-button {
   position: absolute;
@@ -541,7 +609,7 @@ body {
   margin-bottom: 4px;
 }
 
-/* ===== BUTTONS ===== */
+/* ===== BUTTONS =====  */
 .action-button {
   width: 100%;
   padding: 16px;
@@ -557,6 +625,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin-top: 15px;
 }
 
 .action-button:hover:not(:disabled) {
@@ -569,15 +638,41 @@ body {
   cursor: not-allowed;
 }
 
-/* ===== MESSAGES & FEEDBACK ===== */
+ /* === BRIDGE BUTTON ===  */
+.bridge-button {
+  background: linear-gradient(to right, #a8ff78, #78ffd6);
+  color: #000;
+  padding: 14px 28px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 255, 170, 0.3);
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.bridge-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 255, 170, 0.5);
+}
+
+/* ===== MESSAGES & FEEDBACK =====  */
 .error-message,
 .transaction-success {
   display: flex;
   gap: 12px;
-  padding: 16px;
+  padding: 20px 24px;
   border-radius: 12px;
-  margin-top: 20px;
+   margin: 15px 0; 
   align-items: flex-start;
+  line-height: 1.5;
+  min-height: 60px;
+}
+.error-message + .action-button {
+  margin-top: 10px; /* Reduced space between error and button ---------- */
 }
 
 .error-message {
@@ -593,31 +688,90 @@ body {
 .error-message div,
 .transaction-success div {
   flex: 1;
+  padding: 0;
 }
 
 .error-message strong,
 .transaction-success strong {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .error-message p,
 .transaction-success p {
-  font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.error-message p:last-child,
+.transaction-success p:last-child {
+  margin-bottom: 0;
 }
 
 .etherscan-link {
   color: var(--accent);
   font-size: 0.9rem;
   text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .etherscan-link:hover {
   text-decoration: underline;
+  color: var(--primary);
 }
 
-/* ===== TRANSACTION FEES ===== */
+.error-message::before,
+.transaction-success::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.error-message::before {
+  background: var(--error);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+}
+
+.transaction-success::before {
+  background: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+}
+
+ Validation error messages 
+.validation-error,
+.input-error {
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid rgba(255, 82, 82, 0.3);
+  color: var(--error);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.validation-error::before,
+.input-error::before {
+  content: "⚠";
+  font-size: 1.1rem;
+  color: var(--error);
+}
+
+ /* ===== TRANSACTION FEES =====  */
 .fee-row {
   display: flex;
   justify-content: space-between;
@@ -648,7 +802,7 @@ body {
   color: var(--primary);
 }
 
-/* ===== LOADING SPINNER ===== */
+/* ===== LOADING SPINNER =====  */
 .loading-spinner {
   display: inline-block;
   width: 16px;
@@ -659,7 +813,21 @@ body {
   animation: spin 1s ease-in-out infinite;
 }
 
-/* ===== ANIMATIONS ===== */
+/* Info Footer ---------- */
+.footerone {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ===== ANIMATIONS =====  */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -690,14 +858,77 @@ body {
   }
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+ /* ===== RESPONSIVE DESIGN =====  */
 @media (max-width: 600px) {
   .app-container {
     padding: 10px;
   }
 
+  .header-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .header-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .branding {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .top-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    position: static;
+    margin-top: 10px;
+  }
+
+  .top-links a {
+    flex: none;
+    text-align: center;
+    max-width: 120px;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--primary);
+    /* border: 1px solid var(--primary); */
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .top-links a:hover,
+  .top-links a:focus {
+    background: rgba(198, 238, 18, 0.1);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(198, 238, 18, 0.2);
+  }
+
+  .app-logo {
+    margin-bottom: 6px;
+    height: 50px;
+  }
+
   .app-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+  }
+
+  .app-subtitle {
+    font-size: 0.95rem;
+    max-width: 90%;
+    color: var(--text-secondary);
   }
 
   .main-content {
@@ -733,5 +964,23 @@ body {
     gap: 10px;
     align-items: flex-start;
   }
-}
->>>>>>> 34a919b0f6011fbcb917f4fd811220b5836a3d53
+
+  .error-message,
+  .transaction-success {
+    padding: 14px 16px;
+    font-size: 0.88rem;
+  }
+
+  .error-message::before,
+  .transaction-success::before {
+    width: 18px;
+    height: 18px;
+  }
+
+  .error-message p,
+  .transaction-success p {
+    font-size: 0.87rem;
+    line-height: 1.4;
+  }
+} 
+

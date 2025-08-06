@@ -10,7 +10,6 @@ import BurnTokenComponent from "./components/BurnTokenComponent";
 
 
 
-
 export default function App() {
   const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
   const [solAmount, setSolAmount] = useState<number | null>(null);
@@ -46,6 +45,24 @@ export default function App() {
    loadTransactionInfo(solAmount,ethAddress);
    }, []);*/
 
+//   import React, { useState } from "react";
+// import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+// import WalletBalance from "./WalletBalance";
+// import BridgeForm from "./BridgeForm";
+// import BurnTokenComponent from "./BurnTokenComponent";
+// import TransactionInfoCard from "./TransactionInfoCard";
+
+import { useState } from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { WalletBalance } from './components/WalletBalance';
+import  BridgeForm  from './components/BridgeForm';
+import { TransactionInfoCard } from './components/TransactionInfoCard';
+import BurnTokenComponent from "./components/BurnTokenComponent";
+import { type CompleteTransactionInfo } from './ethereum/ethereumWsolContract';
+
+export default function App() {
+  const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
+
   return (
     <div className="app-container">
       {/* Header Section */}
@@ -67,19 +84,16 @@ export default function App() {
 
       {/* Bridge Section */}
       <section className="bridge-section">
-        <BridgeForm
-          onTransactionComplete={() => {
-            // Refresh balance after 2 seconds
-            setTimeout(() => window.location.reload(), 2000);
-          }}
-          balance={null}
-        />
+       <BridgeForm
+  onTransactionComplete={() => {
+    // Refresh balance after 2 seconds
+    setTimeout(() => window.location.reload(), 2000);
+  }}
+/>
       </section>
 
-
-      {/* ethereum burn section */}
-       
-       <BurnTokenComponent />
+      {/* Ethereum burn section */}
+      <BurnTokenComponent />
 
       {/* Transaction Info Section */}
       {transactionInfo && (
@@ -89,7 +103,4 @@ export default function App() {
       )}
     </div>
   );
-
-  
-
-//}
+}
