@@ -16,7 +16,7 @@
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* ===== GLOBAL STYLES ===== */
+ /* ===== GLOBAL STYLES =====  */
 * {
   margin: 0;
   padding: 0;
@@ -34,11 +34,9 @@ body {
     radial-gradient(circle at 90% 80%, rgba(0, 209, 255, 0.05) 0%, transparent 20%);
 }
 
-/* ===== HEADER STYLES ===== */
+ /* ===== HEADER STYLES =====  */
 .app-header {
   padding: 20px;
-  background-color: #0d1117;
-  border-bottom: 1px solid #1c1c1c;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +51,7 @@ body {
   gap: 20px;
   width: 100%;
   margin-bottom: 20px;
-  position: relative; /* Added for positioning context */
+  position: relative; /* Added for positioning context*/
 }
 
 .branding {
@@ -138,7 +136,7 @@ body {
   box-shadow: 0 0 0 2px rgba(198, 238, 18, 0.3);
 }
 
-/* ===== MAIN CONTAINER ===== */
+ /* ===== MAIN CONTAINER =====  */
 .app-container {
   max-width: 500px;
   margin: 0 auto;
@@ -156,7 +154,7 @@ body {
   border-top: 1px solid var(--border);
 }
 
-/* ===== TAB NAVIGATION ===== */
+/* ===== TAB NAVIGATION =====  */
 .tab-container {
   display: flex;
   background: var(--card-bg);
@@ -185,7 +183,7 @@ body {
   box-shadow: 0 2px 8px rgba(0, 255, 157, 0.1);
 }
 
-/* ===== MAIN CONTENT ===== */
+/* ===== MAIN CONTENT =====  */
 .main-content {
   background: var(--card-bg);
   border-radius: 16px;
@@ -195,7 +193,7 @@ body {
   animation: slideUp 0.5s ease-out;
 }
 
-/* ===== BRIDGE STATUS ===== */
+/* ===== BRIDGE STATUS =====  */
 .bridge-status {
   display: flex;
   flex-direction: column;
@@ -263,7 +261,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ===== BURN CONTAINER ===== */
+/* ===== BURN CONTAINER =====  */
 .burn-container {
   display: flex;
   flex-direction: column;
@@ -273,7 +271,7 @@ body {
   padding: 10px;
 }
 
-/* ===== INSTRUCTIONS SECTION ===== */
+ /* ===== INSTRUCTIONS SECTION =====  */
 .instructions-section {
   margin-bottom: 24px;
 }
@@ -312,7 +310,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ===== WALLET SECTION ===== */
+/* ===== WALLET SECTION =====  */
 .wallet-section {
   background: rgba(15, 23, 34, 0.8);
   border-radius: 16px;
@@ -378,7 +376,7 @@ body {
   transform: none;
 }
 
-/* Wallet dropdown styling */
+----------- Wallet dropdown styling 
 .wallet-button ul,
 .wallet-button .wallet-adapter-dropdown,
 .wallet-button [role="menu"] {
@@ -405,7 +403,7 @@ body {
   background-color: #f8fafc !important;
 }
 
-/* Connected Wallet Display */
+--------Connected Wallet Display 
 .connected-wallet {
   display: flex;
   justify-content: space-between;
@@ -459,7 +457,7 @@ body {
   background: rgba(255, 82, 82, 0.2);
 }
 
-/* ===== BURN FORM ===== */
+ /* ===== BURN FORM =====  */
 .burn-form {
   background: rgba(15, 23, 34, 0.8);
   border-radius: 16px;
@@ -611,7 +609,7 @@ body {
   margin-bottom: 4px;
 }
 
-/* ===== BUTTONS ===== */
+/* ===== BUTTONS =====  */
 .action-button {
   width: 100%;
   padding: 16px;
@@ -640,7 +638,7 @@ body {
   cursor: not-allowed;
 }
 
-/* === BRIDGE BUTTON === */
+ /* === BRIDGE BUTTON ===  */
 .bridge-button {
   background: linear-gradient(to right, #a8ff78, #78ffd6);
   color: #000;
@@ -661,7 +659,7 @@ body {
   box-shadow: 0 6px 14px rgba(0, 255, 170, 0.5);
 }
 
-/* ===== MESSAGES & FEEDBACK ===== */
+/* ===== MESSAGES & FEEDBACK =====  */
 .error-message,
 .transaction-success {
   display: flex;
@@ -674,7 +672,7 @@ body {
   min-height: 60px;
 }
 .error-message + .action-button {
-  margin-top: 10px; /* Reduced space between error and button */
+  margin-top: 10px; /* Reduced space between error and button ---------- */
 }
 
 .error-message {
@@ -750,7 +748,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
 }
 
-/* Validation error messages */
+ Validation error messages 
 .validation-error,
 .input-error {
   background: rgba(255, 82, 82, 0.15);
@@ -773,7 +771,7 @@ body {
   color: var(--error);
 }
 
-/* ===== TRANSACTION FEES ===== */
+ /* ===== TRANSACTION FEES =====  */
 .fee-row {
   display: flex;
   justify-content: space-between;
@@ -804,7 +802,7 @@ body {
   color: var(--primary);
 }
 
-/* ===== LOADING SPINNER ===== */
+/* ===== LOADING SPINNER =====  */
 .loading-spinner {
   display: inline-block;
   width: 16px;
@@ -815,7 +813,7 @@ body {
   animation: spin 1s ease-in-out infinite;
 }
 
-/* Info Footer */
+/* Info Footer ---------- */
 .footerone {
   margin-top: 1rem;
   padding: 1rem;
@@ -829,7 +827,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* ===== ANIMATIONS ===== */
+/* ===== ANIMATIONS =====  */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -860,7 +858,7 @@ body {
   }
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+ /* ===== RESPONSIVE DESIGN =====  */
 @media (max-width: 600px) {
   .app-container {
     padding: 10px;
@@ -984,4 +982,5 @@ body {
     font-size: 0.87rem;
     line-height: 1.4;
   }
-}
+} 
+
