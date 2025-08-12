@@ -27,7 +27,7 @@ const BurnTokenComponent = () => {
   // Currently using: 0x990f31d4359Ee8745D479c873549F5eF44494435
   // But EthereumWsolBalance is using a different address where you have 6 wSOL
   // Check EthereumWsolBalance.tsx for the correct CONTRACT_ADDRESS
-  const CONTRACT_ADDRESS = '0x81CAD7CC4D6e972b598674201d8d33efD8973445';
+  const CONTRACT_ADDRESS = '0xF5D98867613023D30E28Fb4910E90A5273cA3aBC';
 
   const handleConnectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {

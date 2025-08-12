@@ -42,9 +42,9 @@ interface TokenDetails {
 //function for getting the token details
 function getTokenDetails(): TokenDetails {
   return {
-    name: "Wrapped SOL",
-    symbol: "wSOL",
-    contract: "0xba82C80E13beDdAE290edf6b016d7f981e43431f"
+    name: "Crossbridge Wrapped SOL",
+    symbol: "CWSOL",
+    contract: "0xF5D98867613023D30E28Fb4910E90A5273cA3aBC"
   };
 }
 
