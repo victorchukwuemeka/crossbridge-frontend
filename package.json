@@ -26,6 +26,7 @@
     "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.80.7",
     "@types/react-router-dom": "^5.3.3",
+    "@vercel/analytics": "^1.5.0",
     "@wagmi/core": "^2.17.3",
     "axios": "^1.11.0",
     "bs58": "^6.0.0",
