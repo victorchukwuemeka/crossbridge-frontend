@@ -98,7 +98,8 @@ import BridgeForm from '../components/BridgeForm';
 import BurnTokenComponent from '../components/BurnTokenComponent';
 import { TransactionInfoCard } from '../components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from '../ethereum/ethereumWsolContract';
-import { Analytics } from "@vercel/analytics/next"
+//import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react";
 
 import '../App.css';
 
@@ -153,7 +154,7 @@ export default function HomePage() {
             <h1 className="app-title">CROSSBRIDGE</h1>
             <p className="app-subtitle">Effortless Bridging from Solana to Ethereum and Beyond</p>
           </div>
-           <Analytics />
+           
         </div>
       </header>
 
@@ -163,6 +164,9 @@ export default function HomePage() {
         <WalletMultiButton />
         <WalletBalance />
       </section> */}
+      <div>
+        
+      </div>
 
       {/* Tabs */}
       <div className="tab-container">
@@ -197,7 +201,9 @@ export default function HomePage() {
           <TransactionInfoCard info={transactionInfo} />
         </section>
       )}
-
+      {/* Analytics Component */}
+      <Analytics />
+      
       {/* Footer */}
       <footer className="app-footer">
         <p>Bridge SOL ↔ WSOL securely across chains</p>
