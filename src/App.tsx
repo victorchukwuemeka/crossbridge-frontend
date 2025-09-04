@@ -109,6 +109,7 @@ import AdminPanel  from './admin/AdminPanel';
 
 export default function App() {
   return (
+    
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />         {/* Root route */}

@@ -221,6 +221,7 @@ export interface BridgeFormProps {
 const BRIDGE_FEE = 0.001;
 const NETWORK_FEE = 0.0005;
 const TOTAL_FEE = BRIDGE_FEE + NETWORK_FEE;
+const TARTGET_NETWORK = 1;
 
 export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
   const wallet = useWallet();
@@ -284,7 +285,7 @@ export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
     try {
       setLoading(true);
       await initializeBridge(wallet);
-      const sig = await lockSol(wallet, solAmount * 1e9, ethAddress);
+      const sig = await lockSol(wallet, solAmount * 1e9, ethAddress, TARTGET_NETWORK);
       alert(`Locked ${amount} SOL\nTx: ${sig}`);
       setAmount('');
       setEthAddress('');

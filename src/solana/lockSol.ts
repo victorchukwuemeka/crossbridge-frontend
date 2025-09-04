@@ -90,7 +90,8 @@ function parseAnchorError(error: any): string {
 export async function lockSol(
   wallet: WalletContextState,
   amountLamports: number,
-  ethAddress: string 
+  ethAddress: string,
+  target_network: number
 ): Promise<string> {
   // checking if the wallet is connected 
   if (!wallet.connected || !wallet.publicKey) {
@@ -254,12 +255,20 @@ export async function lockSol(
     const ethAddressBytes = Buffer.from(ethAddress,'utf8');
     const ethAddressLength = Buffer.allocUnsafe(4);
     ethAddressLength.writeUInt32LE(ethAddressBytes.length, 0);
+
+
+    /**adding the targetnertwork and remember , solana 
+    *only understand array of  bit is can't read the js bytes  and 
+    *under the hood the js number is just a float. 
+    */
+    const network = Buffer.from([target_network]);
      
     const data = Buffer.concat([
       discriminator,
       amountBytes,
       ethAddressLength,
-      ethAddressBytes
+      ethAddressBytes,
+      network
     ]);
 
 
@@ -342,6 +351,7 @@ export async function lockSol(
       feePayer: userPublicKey,
     }).add(ix);
 
+    
     // 10. Check transaction size
     try {
       const serialized = tx.serialize({ requireAllSignatures: false });
