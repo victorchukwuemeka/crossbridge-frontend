@@ -225,7 +225,7 @@ const TOTAL_FEE = BRIDGE_FEE + NETWORK_FEE;
 // Supported networks
 const NETWORKS = [
   { id: 1, name: "Ethereum", symbol: "ETH" },   // chainId 1
-  { id: 8453, name: "Base", symbol: "BASE" },    // Base mainnet chainId
+  { id: 121, name: "Base", symbol: "BASE" },    // Base mainnet chainId
   { id: 137, name: "Polygon", symbol: "MATIC" },  // Polygon mainnet chainId
 ];
 
