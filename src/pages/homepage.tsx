@@ -100,6 +100,8 @@ import { TransactionInfoCard } from '../components/TransactionInfoCard';
 import { getCompleteTransactionInfo, type CompleteTransactionInfo } from '../ethereum/ethereumWsolContract';
 //import { Analytics } from "@vercel/analytics/next"
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster, toast } from "react-hot-toast";
+
 
 import '../App.css';
 
@@ -108,10 +110,11 @@ export default function HomePage() {
   const [balance, setBalance] = useState<string | null>(null);
   const { connection } = useConnection();
   const wallet = useWallet();
+  const [message, setMessage] = useState("");
 
   const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
 
-  useEffect(() => {
+ /**  useEffect(() => {
     const fetchBalance = async () => {
       if (wallet.publicKey && connection) {
         try {
@@ -129,7 +132,7 @@ export default function HomePage() {
     fetchBalance();
     const interval = setInterval(fetchBalance, 5000);
     return () => clearInterval(interval);
-  }, [wallet.publicKey, connection]);
+  }, [wallet.publicKey, connection]);*/
 
   const handleTransactionComplete = async () => {
     setTimeout(async () => {
@@ -184,16 +187,22 @@ export default function HomePage() {
         </button>
       </div>
 
+
       {/* Main Section */}
       <main className="main-content">
         {activeTab === 'bridge' ? (
-          <BridgeForm balance={balance ? parseFloat(balance) : null} onTransactionComplete={function (): void {
-            throw new Error('Function not implemented.');
+          <BridgeForm  onTransactionComplete={function (): void {
+            //setMessage("✅ Transaction succeeded!");
+            toast.success("✅ Transaction succeeded!");
           } } />
         ) : (
           <BurnTokenComponent />
         )}
+
+        <Toaster position="top-right" />
       </main>
+      
+
 
       {/* Transaction Info Section */}
       {transactionInfo && (

@@ -229,7 +229,9 @@ const NETWORKS = [
   { id: 137, name: "Polygon", symbol: "MATIC" },  // Polygon mainnet chainId
 ];
 
-export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
+export default function BridgeForm(
+ { onTransactionComplete }: BridgeFormProps
+) {
   const wallet = useWallet();
   const [balance, setBalance] = useState<string | null>(null);
   const [amount, setAmount] = useState('');
