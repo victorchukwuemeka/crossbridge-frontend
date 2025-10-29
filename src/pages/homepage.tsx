@@ -24,25 +24,6 @@ export default function HomePage() {
 
   const [transactionInfo, setTransactionInfo] = useState<CompleteTransactionInfo | null>(null);
 
- /**  useEffect(() => {
-    const fetchBalance = async () => {
-      if (wallet.publicKey && connection) {
-        try {
-          const balance = await connection.getBalance(wallet.publicKey);
-          setBalance((balance / 1e9).toFixed(4));
-        } catch (error) {
-          console.error("Error fetching balance:", error);
-          setBalance(null);
-        }
-      } else {
-        setBalance(null);
-      }
-    };
-
-    fetchBalance();
-    const interval = setInterval(fetchBalance, 5000);
-    return () => clearInterval(interval);
-  }, [wallet.publicKey, connection]);*/
 
   const handleTransactionComplete = async () => {
     setTimeout(async () => {
