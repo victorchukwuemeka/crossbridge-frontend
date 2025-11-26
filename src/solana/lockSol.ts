@@ -295,7 +295,7 @@ export async function lockSol(
     console.log("User buffer data form :", userPublicKey.toBuffer());
     //  for the  user_balance account  in my solana program!
     const [userBalancePda] = PublicKey.findProgramAddressSync(
-      [Buffer.from("user_balance_v2"), userPublicKey.toBuffer()],
+      [Buffer.from("user_balance_v3"), userPublicKey.toBuffer()],
       PROGRAM_ID
     );
     
