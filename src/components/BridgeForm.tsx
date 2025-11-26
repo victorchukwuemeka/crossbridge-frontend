@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { lockSol, initializeBridge } from '../solana/lockSol';
 import { WalletBalance } from './WalletBalance';
+import styles from '../pages/BridgePage.module.css';
 
 export interface BridgeFormProps {
   onTransactionComplete: () => void;
@@ -14,16 +14,13 @@ const BRIDGE_FEE = 0.001;
 const NETWORK_FEE = 0.0005;
 const TOTAL_FEE = BRIDGE_FEE + NETWORK_FEE;
 
-// Supported networks
 const NETWORKS = [
-  { id: 1, name: "Ethereum", symbol: "ETH" },   // chainId 1
-  { id: 121, name: "Base", symbol: "BASE" },    // Base mainnet chainId
-  { id: 137, name: "Polygon", symbol: "MATIC" },  // Polygon mainnet chainId
+  { id: 1, name: "Ethereum", symbol: "ETH" },
+  { id: 121, name: "Base", symbol: "BASE" },
+  { id: 137, name: "Polygon", symbol: "MATIC" },
 ];
 
-export default function BridgeForm(
- { onTransactionComplete }: BridgeFormProps
-) {
+export default function BridgeForm({ onTransactionComplete }: BridgeFormProps) {
   const wallet = useWallet();
   const [balance, setBalance] = useState<string | null>(null);
   const [amount, setAmount] = useState('');
@@ -31,16 +28,14 @@ export default function BridgeForm(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [userModifiedAmount, setUserModifiedAmount] = useState(false);
-  const [targetNetwork, setTargetNetwork] = useState(NETWORKS[0].id); // default Ethereum
+  const [targetNetwork, setTargetNetwork] = useState(NETWORKS[0].id);
 
-  // Set full balance as input (do not subtract fees)
   const setMaxAmount = () => {
     if (!balance) return;
     setAmount(parseFloat(balance).toFixed(6));
     setUserModifiedAmount(true);
   };
 
-  // Reset when balance changes
   useEffect(() => {
     if (balance === null) {
       setAmount('');
@@ -55,34 +50,13 @@ export default function BridgeForm(
 
   const handleLockSol = async () => {
     setError('');
-
-    if (!wallet.connected || !wallet.publicKey) {
-      setError('Connect wallet first');
-      return;
-    }
-
+    if (!wallet.connected || !wallet.publicKey) return setError('Connect wallet first');
     const solAmount = parseFloat(amount);
-    if (isNaN(solAmount) || solAmount <= 0) {
-      setError('Enter a valid amount of SOL');
-      return;
-    }
-
-    if (solAmount < BRIDGE_FEE) {
-      setError(`Amount must be at least ${BRIDGE_FEE} SOL to cover bridge fee`);
-      return;
-    }
-
-    if (!ethAddress.trim()) {
-      setError('Please enter a recipient address');
-      return;
-    }
-
+    if (isNaN(solAmount) || solAmount <= 0) return setError('Enter a valid SOL amount');
+    if (solAmount < BRIDGE_FEE) return setError(`Amount must be at least ${BRIDGE_FEE} SOL`);
+    if (!ethAddress.trim()) return setError('Enter a recipient address');
     const requiredBalance = solAmount - TOTAL_FEE;
-    if (balance && requiredBalance > parseFloat(balance)) {
-      setError(`Insufficient balance. You need ${requiredBalance.toFixed(6)} SOL (incl. network fee)`);
-      return;
-    }
-
+    if (balance && requiredBalance > parseFloat(balance)) return setError(`Insufficient balance`);
     try {
       setLoading(true);
       await initializeBridge(wallet);
@@ -93,56 +67,40 @@ export default function BridgeForm(
       setUserModifiedAmount(false);
       onTransactionComplete();
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError('Error: ' + errorMessage);
+      setError('Error: ' + (err instanceof Error ? err.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="form-container">
+    <div className={styles.formContainer}>
       {/* Wallet Connect */}
-      <div className="wallet-section" style={{ position: 'relative', zIndex: 1000 }}>
-        <h2>Connect Your Wallet</h2>
-        <div className="wallet-button-container">
-          <WalletMultiButton
-            className="wallet-button"
-            style={{
-              background: 'linear-gradient(90deg, var(--primary), var(--accent))',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '14px 28px',
-              fontWeight: '600',
-              fontSize: '1rem',
-              width: '100%',
-              position: 'relative',
-              zIndex: 101,
-            }}
-          />
-        </div>
+      <div className={styles.walletSection}>
+        <h2 className={styles.sectionTitle}>Connect Your Wallet</h2>
+        <WalletMultiButton className={styles.walletButton} />
       </div>
 
       {/* Balance */}
-      <section className="balance-section card-hover">
+      <div className={`${styles.card} ${styles.cardHover}`}>
         <WalletBalance onBalanceUpdate={setBalance} />
-      </section>
+      </div>
 
       {/* Amount Input */}
-      <div className="amount-input">
-        <label>Amount to Bridge</label>
-        <div className="input-group">
+      <div className={styles.formGroup}>
+        <label className={styles.inputLabel}>Amount to Bridge</label>
+        <div className={styles.inputGroup}>
           <input
             type="number"
             placeholder="0.0"
             value={amount}
             onChange={(e) => handleAmountChange(e.target.value)}
             disabled={!wallet.connected || loading || balance === null}
+            className={styles.inputField}
           />
           <button
             onClick={setMaxAmount}
-            className="max-button"
+            className={styles.maxButton}
             disabled={!wallet.connected || loading}
           >
             MAX
@@ -150,114 +108,57 @@ export default function BridgeForm(
         </div>
       </div>
 
-    {/* Network Selector - Card Style */}
-      <div className="network-selector">
-        <label>Choose Network</label>
-        <div className="network-cards" style={{
-         display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", // smaller width
-      gap: "8px",
-      marginTop: "6px",
-      marginBottom: "15px",
-        }}>
+      {/* Network Selector */}
+      <div className={styles.formGroup}>
+        <label className={styles.inputLabel}>Destination Network</label>
+        <div className={styles.networkCards}>
           {NETWORKS.map(net => (
             <div
               key={net.id}
-              className={`network-card ${targetNetwork === net.id ? 'selected' : ''}`}
+              className={`${styles.networkCard} ${targetNetwork === net.id ? styles.selected : ''}`}
               onClick={() => !loading && wallet.connected && setTargetNetwork(net.id)}
-              style={{
-                padding: "12px", // smaller padding
-                position: "relative",
-          border:
-            targetNetwork === net.id
-              ? "2px solid var(--primary)"
-              : "2px solid transparent", // only show border on click
-          borderRadius: "10px",
-          cursor: !loading && wallet.connected ? "pointer" : "not-allowed",
-          textAlign: "center",
-          transition: "all 0.2s ease",
-          background: "transparent", // matches background
-          opacity: !loading && wallet.connected ? 1 : 0.6,
-              }}
             >
-              <div style={{ fontWeight: '600', fontSize: '1rem', marginBottom: '4px' }}>
-                {net.name}
-              </div>
-            
-             {targetNetwork === net.id && (
-      <div
-        style={{
-          position: "absolute",
-          top: "6px",
-          left: "6px",
-          width: "8px",
-          height: "8px",
-          backgroundColor: "var(--primary)",
-          borderRadius: "50%",
-        }}
-      />
-    )}
+              {net.name}
+              {targetNetwork === net.id && <div className={styles.selectedIndicator} />}
             </div>
           ))}
         </div>
       </div>
 
-
       {/* Recipient Address */}
-      <div className="amount-input">
-        <label>Recipient Address</label>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="0x... or base/polygon address"
-            value={ethAddress}
-            onChange={(e) => setEthAddress(e.target.value)}
-            disabled={!wallet.connected || loading}
-          />
+      <div className={styles.formGroup}>
+        <label className={styles.inputLabel}>Recipient Address</label>
+        <input
+          type="text"
+          placeholder="0x... or Base / Polygon address"
+          value={ethAddress}
+          onChange={(e) => setEthAddress(e.target.value)}
+          disabled={!wallet.connected || loading}
+          className={styles.inputField}
+        />
+      </div>
+
+      {/* Fees */}
+      <div className={styles.feeSummary}>
+        <div className={styles.feeRow}><span>Bridge Fee</span><span>{BRIDGE_FEE} SOL</span></div>
+        <div className={styles.feeRow}><span>Network Fee</span><span>{NETWORK_FEE} SOL</span></div>
+        <div className={`${styles.feeRow} ${styles.feeTotal}`}>
+          <span>Receivable</span>
+          <span>{amount ? (Math.max(0, parseFloat(amount) - TOTAL_FEE)).toFixed(6) : '0.000000'} wSOL</span>
         </div>
-      </div>
-
-
-
-      {/* Fee Summary */}
-      <div className="fee-row">
-        <span>Bridge Fee</span>
-        <span>{BRIDGE_FEE} SOL</span>
-      </div>
-      <div className="fee-row">
-        <span>Network Fee</span>
-        <span>{NETWORK_FEE} SOL</span>
-      </div>
-      <div className="fee-row total">
-        <span>You will receive</span>
-        <span>
-          {amount ? (Math.max(0, parseFloat(amount) - TOTAL_FEE)).toFixed(6) : '0.000000'} wSOL
-        </span>
       </div>
 
       {/* Error */}
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className={styles.errorMessage}>{error}</div>}
 
       {/* Action Button */}
       <button
-        className="action-button"
+        className={styles.actionButton}
         onClick={handleLockSol}
         disabled={loading || !wallet.connected || !amount || !ethAddress}
       >
-        {loading ? 'Processing...' : <span className="button-text">Bridge tokens</span>}
+        {loading ? 'Processing...' : 'Bridge Tokens'}
       </button>
-
-      {/* Footer */}
-      <div className="footerone">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '6px', height: '6px', background: '#14F195', borderRadius: '50%' }}></span>
-          <span>Real-time balance updates</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '6px', height: '6px', background: '#14F195', borderRadius: '50%' }}></span>
-          <span>Connected to Solana Devnet</span>
-        </div>
-      </div>
     </div>
   );
 }

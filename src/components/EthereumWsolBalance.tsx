@@ -8,7 +8,6 @@ const WSOL_CONTRACT_ADDRESS = '0x81CAD7CC4D6e972b598674201d8d33efD8973445' as co
 const WSOL_DECIMALS = 9; // WSOL uses 9 decimals
 const SEPOLIA_CHAIN_ID = 11155111; 
 
-
 // ERC-20 ABI for balance and symbol
 const ERC20_ABI = [
   {
@@ -35,7 +34,7 @@ interface EthereumWsolBalanceProps {
 
 export function EthereumWsolBalance({ 
   className = '',
-  showRefreshButton = true,
+  showRefreshButton = false,
   precision = 4 
 }: EthereumWsolBalanceProps = {}) {
   const { address, isConnected } = useAccount();
@@ -58,6 +57,7 @@ export function EthereumWsolBalance({
     args: address ? [address] : undefined,
     query: {
       enabled: !!address && isConnected,
+      
       retry: 3,
       retryDelay: 1000,
     },
@@ -77,8 +77,7 @@ export function EthereumWsolBalance({
     },
   });
 
-
-   // Debug logging
+  // Debug logging
   useEffect(() => {
     console.log('=== WSOL Balance Debug ===');
     console.log('Address:', address);
@@ -92,7 +91,7 @@ export function EthereumWsolBalance({
     console.log('Current Chain ID:', chainId);
     console.log('Is Sepolia Network:', isOnSepoliaNetwork);
     console.log('Expected Chain ID (Sepolia):', SEPOLIA_CHAIN_ID);
-  }, [address, isConnected, balance, balanceLoading, balanceError, symbol,chainId,isOnSepoliaNetwork,SEPOLIA_CHAIN_ID]);
+  }, [address, isConnected, balance, balanceLoading, balanceError, symbol, chainId, isOnSepoliaNetwork, SEPOLIA_CHAIN_ID]);
 
   // Format balance when it changes
   useEffect(() => {
@@ -126,79 +125,119 @@ export function EthereumWsolBalance({
   // Render states
   if (!isConnected) {
     return (
-      <div className={`wsol-balance-container ${className}`}>
-        <div className="wsol-balance-message">
-          Connect your wallet to view WSOL balance
-        </div>
+      <div style={{ 
+        padding: '12px', 
+        textAlign: 'center',
+        color: 'var(--text-secondary)',
+        fontSize: '0.9rem'
+      }}>
+        Connect your wallet to view WSOL balance
       </div>
     );
   }
    
-  //checking network
-  if (!isOnSepoliaNetwork) {
-    return (
-      <div className={`wsol-balance-container ${className}`}>
-        <div className="wsol-balance-error">
-          <div>❌ Wrong Network</div>
-          <div>Your wSOL tokens are on Sepolia testnet.</div>
-          <div>Current network: Chain ID {chainId}</div>
-          <div>Please switch to Sepolia testnet in your wallet.</div>
-        </div>
-      </div>
-    );
-  }
-
+  // Network check removed - handled by parent modal
 
   if (balanceLoading || symbolLoading) {
     return (
-      <div className={`wsol-balance-container ${className}`}>
-        <div className="wsol-balance-loading">
-          Loading WSOL balance...
-        </div>
+      <div style={{ 
+        padding: '12px', 
+        textAlign: 'center',
+        color: 'var(--text-secondary)',
+        fontSize: '0.9rem'
+      }}>
+        Loading WSOL balance...
       </div>
     );
   }
 
   if (balanceError) {
+    // Don't show error if on wrong network - parent handles it
+    if (!isOnSepoliaNetwork) {
+      return null;
+    }
+    
     return (
-      <div className={`wsol-balance-container ${className}`}>
-        <div className="wsol-balance-error">
-          <div>Error loading balance</div>
-          {balanceErrorDetails && (
-            <div className="error-details">
-              {balanceErrorDetails.message || 'Unknown error'}
-            </div>
-          )}
-          <button 
-            onClick={handleRefresh}
-            className="wsol-balance-retry-button"
-          >
-            Retry
-          </button>
+      <div style={{
+        padding: '12px',
+        background: 'rgba(255, 82, 82, 0.1)',
+        border: '1px solid rgba(255, 82, 82, 0.3)',
+        borderRadius: '8px',
+        textAlign: 'center'
+      }}>
+        <div style={{ 
+          color: 'var(--error)', 
+          fontSize: '0.9rem',
+          marginBottom: '8px'
+        }}>
+          Error loading balance
         </div>
+        {balanceErrorDetails && (
+          <div style={{ 
+            fontSize: '0.8rem', 
+            color: 'var(--text-secondary)',
+            marginBottom: '12px'
+          }}>
+            {balanceErrorDetails.message || 'Unknown error'}
+          </div>
+        )}
+        <button 
+          onClick={handleRefresh}
+          style={{
+            padding: '8px 16px',
+            background: 'rgba(255, 82, 82, 0.1)',
+            border: '1px solid var(--error)',
+            borderRadius: '6px',
+            color: 'var(--error)',
+            cursor: 'pointer',
+            fontSize: '0.85rem',
+            fontWeight: 600
+          }}
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
+  // Don't show balance if on wrong network
+  if (!isOnSepoliaNetwork) {
+    return null;
+  }
+
   return (
-    <div className={`wsol-balance-container ${className}`}>
-      <div className="wsol-balance-display">
-        <div className="wsol-balance-info">
-          <span className="wsol-symbol">{(symbol as string) || 'WSOL'}</span>
-        
-          <span className="wsol-amount">{formatDisplayBalance(formattedBalance)}</span>
-        </div>
-        {showRefreshButton && (
-          <button 
-            onClick={handleRefresh}
-            className="wsol-balance-refresh-button"
-            disabled={balanceLoading}
-          >
-            {balanceLoading ? 'Refreshing...' : 'Refresh'}
-          </button>
-        )}
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center',
+      padding: '8px 0'
+    }}>
+      <div style={{ 
+        fontSize: '0.85rem', 
+        color: 'var(--text-secondary)' 
+      }}>
+        Contract Balance
+      </div>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'baseline', 
+        gap: '6px' 
+      }}>
+        <span style={{ 
+          fontSize: '1rem', 
+          fontWeight: 700, 
+          color: 'var(--text)' 
+        }}>
+          {formatDisplayBalance(formattedBalance)}
+        </span>
+        <span style={{ 
+          fontSize: '0.85rem', 
+          fontWeight: 600, 
+          color: 'var(--text-secondary)' 
+        }}>
+          {(symbol as string) || 'WSOL'}
+        </span>
       </div>
     </div>
   );
 }
-

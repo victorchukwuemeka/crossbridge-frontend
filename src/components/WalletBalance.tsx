@@ -163,12 +163,34 @@ export function WalletBalance({ onBalanceUpdate }: WalletBalanceProps) {
 
         {/* Refresh Button */}
         <button
-          onClick={fetchBalance}
-          disabled={loading || !wallet.connected}
-          className="action-button"
-        >
-          {loading ? 'Refreshing...' : <span className="button-text">Refresh Balance</span>}
-        </button>
+  onClick={fetchBalance}
+  disabled={loading || !wallet.connected}
+  style={{
+    width: '100%',
+    padding: '14px 24px',
+    background: 'linear-gradient(90deg, #c6ee12, #00D1FF)',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '12px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: loading || !wallet.connected ? 'not-allowed' : 'pointer',
+    opacity: loading || !wallet.connected ? 0.6 : 1,
+    transition: 'all 0.3s ease'
+  }}
+  onMouseEnter={(e) => {
+    if (!loading && wallet.connected) {
+      e.currentTarget.style.transform = 'translateY(-2px)';
+      e.currentTarget.style.boxShadow = '0 6px 20px rgba(198, 238, 18, 0.3)';
+    }
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = 'translateY(0)';
+    e.currentTarget.style.boxShadow = 'none';
+  }}
+>
+  {loading ? 'Refreshing...' : 'Refresh Balance'}
+</button>
       </div>
     </div>
   );
