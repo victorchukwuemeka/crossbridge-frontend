@@ -55,7 +55,7 @@ export default function LandingPage() {
   return (
     <div className="landing-page">
       {/* HERO SECTION */}
-      <section className="hero">
+      <section className="hero" style={{ backgroundImage: 'url(/backhero.jpeg)' }}>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1 className="hero-title">
